@@ -4,7 +4,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { ProductGrid } from "@/components/shop/product-card";
 import { NewsletterForm } from "@/components/shop/newsletter-form";
 import { IconArrow, IconInstagram } from "@/components/shop/icons";
-import { getCollections, getProductBySlug, getProducts } from "@/lib/data/catalog";
+import { getCollections, getModelShots, getProductBySlug, getProducts } from "@/lib/data/catalog";
 import { getReviews } from "@/lib/data/content";
 import { formatTRY } from "@/lib/money";
 import { settings } from "@/lib/settings";
@@ -12,12 +12,12 @@ import { settings } from "@/lib/settings";
 const HERO_SLUG = "van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz";
 
 export default async function HomePage() {
-  const [hero, collections, newArrivals, reviews, allProducts] = await Promise.all([
+  const [hero, collections, newArrivals, reviews, instagram] = await Promise.all([
     getProductBySlug(HERO_SLUG),
     getCollections(),
     getProducts({ collection: "yeni-gelenler", inStockOnly: true, sort: "yeni" }),
     getReviews(),
-    getProducts({ sort: "yeni" }),
+    getModelShots(6),
   ]);
   const featured = collections.filter((c) => c.featured);
   // Şal ve eşarpları dönüşümlü diz: art arda aynı tür kart monoton duruyor.
@@ -27,12 +27,7 @@ export default async function HomePage() {
     .flat()
     .filter((p) => p !== undefined)
     .slice(0, 8);
-  // "Omuzlarda": model üzerindeki kareler.
-  const instagram = allProducts
-    .map((p) => ({ slug: p.slug, image: p.images.find((im) => im.alt.includes("model üzerinde")) }))
-    .filter((x): x is { slug: string; image: NonNullable<typeof x.image> } => x.image !== undefined)
-    .filter((_, i) => i % 2 === 0)
-    .slice(0, 6);
+
 
   return (
     <>

@@ -19,6 +19,7 @@ import {
   type Collection,
   type ProductDetail,
   type ProductFilter,
+  type ProductImage,
   type ProductSummary,
 } from "./schema";
 
@@ -72,4 +73,21 @@ export async function getAllProductSlugs(): Promise<string[]> {
 
 export async function getAllCollectionSlugs(): Promise<string[]> {
   return catalog.collections.map((c) => c.slug);
+}
+
+/** "Omuzlarda" şeridi: model üzerindeki kareler, şal ve eşarp dönüşümlü. */
+export async function getModelShots(limit = 6): Promise<Array<{ slug: string; image: ProductImage }>> {
+  "use cache";
+  cacheLife("hours");
+  const shots = catalog.products.flatMap((p) => {
+    const image = p.images.find((im) => im.alt.includes("model üzerinde"));
+    return image ? [{ slug: p.slug, type: p.type, image }] : [];
+  });
+  const shawls = shots.filter((x) => x.type === "sal");
+  const scarves = shots.filter((x) => x.type === "esarp");
+  return Array.from({ length: Math.ceil(limit / 2) }, (_, i) => [shawls[i], scarves[i]])
+    .flat()
+    .filter((x) => x !== undefined)
+    .slice(0, limit)
+    .map(({ slug, image }) => ({ slug, image }));
 }
