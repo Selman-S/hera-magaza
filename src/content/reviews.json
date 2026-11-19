@@ -1,0 +1,26 @@
+[
+  {
+    "id": "ornek-1",
+    "author": "Elif K.",
+    "city": "İstanbul",
+    "product": "Van Gogh Badem Çiçeği Hint İpeği Şal – Turkuaz",
+    "text": "Fotoğraftakinden de güzel. Kutusunu açınca annem ağladı; doğum günü için almıştım.",
+    "sample": true
+  },
+  {
+    "id": "ornek-2",
+    "author": "Zeynep A.",
+    "city": "Ankara",
+    "product": "Klimt Çiçek Bahçesi İpek Şal",
+    "text": "Renkler çok canlı, kumaşı ince ama dökümlü. WhatsApp'tan sorduğum her şeye hemen cevap geldi.",
+    "sample": true
+  },
+  {
+    "id": "ornek-3",
+    "author": "Ayşe T.",
+    "city": "İzmir",
+    "product": "Van Gogh Badem Çiçeği İpek Eşarp – Lacivert",
+    "text": "İkinci kez sipariş veriyorum. Bu sefer kendime aldım, hediye paketini yine de istedim.",
+    "sample": true
+  }
+]

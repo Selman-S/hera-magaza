@@ -1,0 +1,74 @@
+[
+  {
+    "slug": "tumu",
+    "title": "Tüm ürünler",
+    "kicker": "Sergi",
+    "description": "Hint ipeği şallar, sanat eseri desenli ipek şallar ve 95×95 ipek eşarplar. Her desenden yalnızca birkaç parça.",
+    "rule": "all",
+    "featured": false,
+    "coverProduct": "van-gogh-badem-agaci-ipek-sal-70x180"
+  },
+  {
+    "slug": "sallar",
+    "title": "Şallar",
+    "kicker": "Koleksiyon",
+    "description": "Omuza alınan bir tablo. 70×175 ile 65×190 cm arasında, ipek ve Hint ipeği şallar.",
+    "rule": "manual",
+    "featured": false,
+    "coverProduct": "van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz"
+  },
+  {
+    "slug": "esarplar",
+    "title": "Eşarplar",
+    "kicker": "Koleksiyon",
+    "description": "95×95 cm ipek eşarplar. Başta, boyunda, çantanın sapında.",
+    "rule": "manual",
+    "featured": false,
+    "coverProduct": "van-gogh-badem-cicegi-ipek-esarp-95x95-sari"
+  },
+  {
+    "slug": "van-gogh",
+    "title": "Van Gogh",
+    "kicker": "Sanatçı",
+    "description": "Badem Çiçekleri ve Zambaklar: Van Gogh'un en çok sevilen iki tablosu, ipek üzerinde.",
+    "rule": "manual",
+    "featured": true,
+    "coverProduct": "van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz"
+  },
+  {
+    "slug": "klimt",
+    "title": "Klimt",
+    "kicker": "Sanatçı",
+    "description": "Gustav Klimt'in bahçe tabloları: gökyüzü olmayan, baştan sona çiçek.",
+    "rule": "manual",
+    "featured": true,
+    "coverProduct": "klimt-cicek-bahcesi-ipek-sal-70x180"
+  },
+  {
+    "slug": "hint-ipegi",
+    "title": "Hint İpeği",
+    "kicker": "Kumaş",
+    "description": "Hafif, akışkan ve mat parlaklıkta Hint ipeği şallar. 70×175 cm.",
+    "rule": "manual",
+    "featured": true,
+    "coverProduct": "van-gogh-badem-cicegi-hint-ipegi-sal-70x175-bej-lacivert"
+  },
+  {
+    "slug": "yeni-gelenler",
+    "title": "Yeni gelenler",
+    "kicker": "Koleksiyon",
+    "description": "Son eklenen desenler.",
+    "rule": "manual",
+    "featured": false,
+    "coverProduct": "van-gogh-badem-cicegi-ipek-esarp-95x95-turkuaz"
+  },
+  {
+    "slug": "hediye",
+    "title": "Hediye",
+    "kicker": "Seçki",
+    "description": "Sanatseverlere hediye: en çok hediye olarak seçilen desenler. Her sipariş hediye kutusunda, isterseniz el yazısı notla.",
+    "rule": "manual",
+    "featured": false,
+    "coverProduct": "van-gogh-badem-cicegi-hint-ipegi-sal-70x175-bej-lacivert"
+  }
+]

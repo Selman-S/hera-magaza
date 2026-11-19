@@ -1,0 +1,1324 @@
+[
+  {
+    "id": "hr-001",
+    "trendyolId": "1131158434",
+    "slug": "van-gogh-badem-agaci-ipek-sal-70x180",
+    "name": "Van Gogh Badem Ağacı İpek Şal 70×180",
+    "type": "sal",
+    "artist": {
+      "name": "Vincent van Gogh",
+      "slug": "van-gogh"
+    },
+    "artwork": {
+      "title": "Badem Çiçekleri",
+      "year": "1890",
+      "story": "Van Gogh bu tabloyu Şubat 1890'da, kardeşi Theo'nun oğlu doğduğunda boyadı. Mavi göğe uzanan çiçekli dallar yeni bir hayatın simgesiydi; tablo yıllarca bebeğin odasının duvarında asılı kaldı."
+    },
+    "fabric": "İpek",
+    "size": "70×180",
+    "priceKurus": 119900,
+    "stock": 1,
+    "colors": [
+      "bej",
+      "lila",
+      "krem"
+    ],
+    "images": [
+      {
+        "src": "/urunler/van-gogh-badem-agaci-ipek-sal-70x180-3.jpg",
+        "width": 892,
+        "height": 1600,
+        "alt": "Van Gogh Badem Ağacı İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-agaci-ipek-sal-70x180-4.jpg",
+        "width": 711,
+        "height": 1600,
+        "alt": "Van Gogh Badem Ağacı İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-agaci-ipek-sal-70x180-1.jpg",
+        "width": 892,
+        "height": 1600,
+        "alt": "Van Gogh Badem Ağacı İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-agaci-ipek-sal-70x180-2.jpg",
+        "width": 892,
+        "height": 1600,
+        "alt": "Van Gogh Badem Ağacı İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-agaci-ipek-sal-70x180-5.jpg",
+        "width": 1200,
+        "height": 1600,
+        "alt": "Van Gogh Badem Ağacı İpek Şal 70×180, model üzerinde"
+      }
+    ],
+    "description": "Krem zemin üzerinde lila çiçekli badem dalları. Tablonun mavi gökyüzü yerine sıcak bir bej tercih ettik; her renkle kolayca eşleşir.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "sallar",
+      "van-gogh",
+      "hediye"
+    ],
+    "isNew": false,
+    "createdAt": "2026-06-24"
+  },
+  {
+    "id": "hr-002",
+    "trendyolId": "1137980014",
+    "slug": "klimt-cicek-bahcesi-ipek-sal-70x180",
+    "name": "Klimt Çiçek Bahçesi İpek Şal 70×180",
+    "type": "sal",
+    "artist": {
+      "name": "Gustav Klimt",
+      "slug": "klimt"
+    },
+    "artwork": {
+      "title": "Çiçek Bahçesi",
+      "year": "1907",
+      "story": "Klimt yazlarını Attersee kıyısında geçirir, kare tuvallere bahçeleri ve çayırları boyardı. Bu tablolarda gökyüzü yoktur: tüm yüzey çiçeklerle dolup bir halıya dönüşür."
+    },
+    "fabric": "İpek",
+    "size": "70×180",
+    "priceKurus": 119900,
+    "stock": 1,
+    "colors": [
+      "yeşil",
+      "mint",
+      "pembe",
+      "mor"
+    ],
+    "images": [
+      {
+        "src": "/urunler/klimt-cicek-bahcesi-ipek-sal-70x180-1.jpg",
+        "width": 712,
+        "height": 1600,
+        "alt": "Klimt Çiçek Bahçesi İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/klimt-cicek-bahcesi-ipek-sal-70x180-2.jpg",
+        "width": 712,
+        "height": 1600,
+        "alt": "Klimt Çiçek Bahçesi İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/klimt-cicek-bahcesi-ipek-sal-70x180-3.jpg",
+        "width": 712,
+        "height": 1600,
+        "alt": "Klimt Çiçek Bahçesi İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/klimt-cicek-bahcesi-ipek-sal-70x180-4.jpg",
+        "width": 1200,
+        "height": 1600,
+        "alt": "Klimt Çiçek Bahçesi İpek Şal 70×180, model üzerinde"
+      }
+    ],
+    "description": "Mint yeşili zeminde pembe ve mor çiçeklerden bir halı. Klimt'in bahçe tablolarındaki gibi desen kenardan kenara akar.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "sallar",
+      "klimt",
+      "hediye"
+    ],
+    "isNew": false,
+    "createdAt": "2026-04-24"
+  },
+  {
+    "id": "hr-003",
+    "trendyolId": "1065255512",
+    "slug": "van-gogh-zambaklar-ipek-sal-65x190",
+    "name": "Van Gogh Zambaklar İpek Şal 65×190",
+    "type": "sal",
+    "artist": {
+      "name": "Vincent van Gogh",
+      "slug": "van-gogh"
+    },
+    "artwork": {
+      "title": "Zambaklar",
+      "year": "1889",
+      "story": "Saint-Rémy'deki hastanenin bahçesinde, oraya yerleştiği ilk haftalarda boyandı. Kalın konturlar ve canlı renkler, Van Gogh'un Japon baskılarına duyduğu hayranlığı taşır."
+    },
+    "fabric": "İpek",
+    "size": "65×190",
+    "priceKurus": 119900,
+    "stock": 1,
+    "colors": [
+      "yeşil",
+      "mor",
+      "turuncu"
+    ],
+    "images": [
+      {
+        "src": "/urunler/van-gogh-zambaklar-ipek-sal-65x190-1.jpg",
+        "width": 711,
+        "height": 1600,
+        "alt": "Van Gogh Zambaklar İpek Şal 65×190, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-zambaklar-ipek-sal-65x190-2.jpg",
+        "width": 711,
+        "height": 1600,
+        "alt": "Van Gogh Zambaklar İpek Şal 65×190, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-zambaklar-ipek-sal-65x190-3.jpg",
+        "width": 711,
+        "height": 1600,
+        "alt": "Van Gogh Zambaklar İpek Şal 65×190, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-zambaklar-ipek-sal-65x190-4.jpg",
+        "width": 711,
+        "height": 1600,
+        "alt": "Van Gogh Zambaklar İpek Şal 65×190, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-zambaklar-ipek-sal-65x190-5.jpg",
+        "width": 711,
+        "height": 1600,
+        "alt": "Van Gogh Zambaklar İpek Şal 65×190, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-zambaklar-ipek-sal-65x190-6.jpg",
+        "width": 711,
+        "height": 1600,
+        "alt": "Van Gogh Zambaklar İpek Şal 65×190, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-zambaklar-ipek-sal-65x190-7.jpg",
+        "width": 711,
+        "height": 1600,
+        "alt": "Van Gogh Zambaklar İpek Şal 65×190, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-zambaklar-ipek-sal-65x190-8.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Zambaklar İpek Şal 65×190, model üzerinde"
+      }
+    ],
+    "description": "Koyu yeşil yapraklar arasından yükselen mor zambaklar ve kenarda tek bir turuncu çiçek. Pembe bordürle çerçevelendi.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "sallar",
+      "van-gogh"
+    ],
+    "isNew": false,
+    "createdAt": "2026-10-18"
+  },
+  {
+    "id": "hr-004",
+    "trendyolId": "1158949467",
+    "slug": "cicek-cayiri-ipek-sal-70x180",
+    "name": "Çiçek Çayırı İpek Şal 70×180",
+    "type": "sal",
+    "artist": null,
+    "artwork": null,
+    "fabric": "İpek",
+    "size": "70×180",
+    "priceKurus": 119900,
+    "stock": 2,
+    "colors": [
+      "pembe",
+      "altın",
+      "lila"
+    ],
+    "images": [
+      {
+        "src": "/urunler/cicek-cayiri-ipek-sal-70x180-1.jpg",
+        "width": 712,
+        "height": 1600,
+        "alt": "Çiçek Çayırı İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/cicek-cayiri-ipek-sal-70x180-2.jpg",
+        "width": 1200,
+        "height": 1534,
+        "alt": "Çiçek Çayırı İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/cicek-cayiri-ipek-sal-70x180-3.jpg",
+        "width": 712,
+        "height": 1600,
+        "alt": "Çiçek Çayırı İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/cicek-cayiri-ipek-sal-70x180-4.jpg",
+        "width": 712,
+        "height": 1600,
+        "alt": "Çiçek Çayırı İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/cicek-cayiri-ipek-sal-70x180-5.jpg",
+        "width": 1200,
+        "height": 1600,
+        "alt": "Çiçek Çayırı İpek Şal 70×180, model üzerinde"
+      }
+    ],
+    "description": "Altın ve pembe tonlarında, uzaktan bir izlenimci tabloyu andıran çiçekli çayır deseni.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "sallar"
+    ],
+    "isNew": false,
+    "createdAt": "2026-06-23"
+  },
+  {
+    "id": "hr-005",
+    "trendyolId": "1137979396",
+    "slug": "turkuaz-bahar-ipek-sal-70x180",
+    "name": "Turkuaz Bahar İpek Şal 70×180",
+    "type": "sal",
+    "artist": null,
+    "artwork": null,
+    "fabric": "İpek",
+    "size": "70×180",
+    "priceKurus": 119900,
+    "stock": 2,
+    "colors": [
+      "turkuaz",
+      "yeşil",
+      "pembe"
+    ],
+    "images": [
+      {
+        "src": "/urunler/turkuaz-bahar-ipek-sal-70x180-1.jpg",
+        "width": 1200,
+        "height": 1534,
+        "alt": "Turkuaz Bahar İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/turkuaz-bahar-ipek-sal-70x180-2.jpg",
+        "width": 712,
+        "height": 1600,
+        "alt": "Turkuaz Bahar İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/turkuaz-bahar-ipek-sal-70x180-3.jpg",
+        "width": 712,
+        "height": 1600,
+        "alt": "Turkuaz Bahar İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/turkuaz-bahar-ipek-sal-70x180-4.jpg",
+        "width": 1199,
+        "height": 1600,
+        "alt": "Turkuaz Bahar İpek Şal 70×180, model üzerinde"
+      }
+    ],
+    "description": "Turkuaz zemin üzerinde iri, suluboya hissinde bahar çiçekleri. Koyu yeşil bordür deseni toparlar.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "sallar",
+      "hediye"
+    ],
+    "isNew": false,
+    "createdAt": "2026-04-24"
+  },
+  {
+    "id": "hr-006",
+    "trendyolId": "1158945276",
+    "slug": "gelincik-ipek-sal-70x180",
+    "name": "Gelincik İpek Şal 70×180",
+    "type": "sal",
+    "artist": null,
+    "artwork": null,
+    "fabric": "İpek",
+    "size": "70×180",
+    "priceKurus": 119900,
+    "stock": 2,
+    "colors": [
+      "pembe",
+      "fuşya",
+      "mor"
+    ],
+    "images": [
+      {
+        "src": "/urunler/gelincik-ipek-sal-70x180-1.jpg",
+        "width": 1200,
+        "height": 1534,
+        "alt": "Gelincik İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/gelincik-ipek-sal-70x180-2.jpg",
+        "width": 712,
+        "height": 1600,
+        "alt": "Gelincik İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/gelincik-ipek-sal-70x180-3.jpg",
+        "width": 712,
+        "height": 1600,
+        "alt": "Gelincik İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/gelincik-ipek-sal-70x180-4.jpg",
+        "width": 712,
+        "height": 1600,
+        "alt": "Gelincik İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/gelincik-ipek-sal-70x180-5.jpg",
+        "width": 712,
+        "height": 1600,
+        "alt": "Gelincik İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/gelincik-ipek-sal-70x180-6.jpg",
+        "width": 1200,
+        "height": 1600,
+        "alt": "Gelincik İpek Şal 70×180, model üzerinde"
+      }
+    ],
+    "description": "Pembeden fuşyaya geçen gelincik ve anemon çiçekleri. Desen alta doğru yoğunlaşır, omuzda hafif kalır.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "sallar"
+    ],
+    "isNew": false,
+    "createdAt": "2026-06-23"
+  },
+  {
+    "id": "hr-007",
+    "trendyolId": "1194173363",
+    "slug": "botanik-cizim-ipek-sal-70x180",
+    "name": "Botanik Çizim İpek Şal 70×180",
+    "type": "sal",
+    "artist": null,
+    "artwork": null,
+    "fabric": "İpek",
+    "size": "70×180",
+    "priceKurus": 119900,
+    "stock": 1,
+    "colors": [
+      "krem",
+      "sarı",
+      "gri"
+    ],
+    "images": [
+      {
+        "src": "/urunler/botanik-cizim-ipek-sal-70x180-1.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Botanik Çizim İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/botanik-cizim-ipek-sal-70x180-2.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Botanik Çizim İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/botanik-cizim-ipek-sal-70x180-3.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Botanik Çizim İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/botanik-cizim-ipek-sal-70x180-4.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Botanik Çizim İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/botanik-cizim-ipek-sal-70x180-5.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Botanik Çizim İpek Şal 70×180, manken üzerinde"
+      },
+      {
+        "src": "/urunler/botanik-cizim-ipek-sal-70x180-6.jpg",
+        "width": 1200,
+        "height": 1600,
+        "alt": "Botanik Çizim İpek Şal 70×180, model üzerinde"
+      }
+    ],
+    "description": "Krem zemin üzerinde eski bir botanik defterinden çıkmış gibi duran ince çizim çiçekler. Sade ve zamansız.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "sallar"
+    ],
+    "isNew": false,
+    "createdAt": "2026-08-31"
+  },
+  {
+    "id": "hr-008",
+    "trendyolId": "1186994952",
+    "slug": "van-gogh-badem-cicegi-hint-ipegi-sal-70x175-hardal",
+    "name": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Hardal",
+    "type": "sal",
+    "artist": {
+      "name": "Vincent van Gogh",
+      "slug": "van-gogh"
+    },
+    "artwork": {
+      "title": "Badem Çiçekleri",
+      "year": "1890",
+      "story": "Van Gogh bu tabloyu Şubat 1890'da, kardeşi Theo'nun oğlu doğduğunda boyadı. Mavi göğe uzanan çiçekli dallar yeni bir hayatın simgesiydi; tablo yıllarca bebeğin odasının duvarında asılı kaldı."
+    },
+    "fabric": "Hint ipeği",
+    "size": "70×175",
+    "priceKurus": 119900,
+    "stock": 2,
+    "colors": [
+      "hardal",
+      "sarı",
+      "altın"
+    ],
+    "images": [
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-hardal-1.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Hardal, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-hardal-2.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Hardal, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-hardal-3.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Hardal, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-hardal-4.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Hardal, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-hardal-5.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Hardal, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-hardal-6.jpg",
+        "width": 1194,
+        "height": 1600,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Hardal, model üzerinde"
+      }
+    ],
+    "description": "Badem Çiçekleri deseninin hardal ve altın tonlu yorumu. Sonbahar ışığında en güzel hâlini alır.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "sallar",
+      "van-gogh",
+      "hint-ipegi",
+      "yeni-gelenler"
+    ],
+    "isNew": true,
+    "createdAt": "2026-08-16"
+  },
+  {
+    "id": "hr-009",
+    "trendyolId": "1186994953",
+    "slug": "van-gogh-badem-cicegi-hint-ipegi-sal-70x175-bej-lacivert",
+    "name": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Bej Lacivert",
+    "type": "sal",
+    "artist": {
+      "name": "Vincent van Gogh",
+      "slug": "van-gogh"
+    },
+    "artwork": {
+      "title": "Badem Çiçekleri",
+      "year": "1890",
+      "story": "Van Gogh bu tabloyu Şubat 1890'da, kardeşi Theo'nun oğlu doğduğunda boyadı. Mavi göğe uzanan çiçekli dallar yeni bir hayatın simgesiydi; tablo yıllarca bebeğin odasının duvarında asılı kaldı."
+    },
+    "fabric": "Hint ipeği",
+    "size": "70×175",
+    "priceKurus": 119900,
+    "stock": 1,
+    "colors": [
+      "bej",
+      "lacivert",
+      "somon"
+    ],
+    "images": [
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-bej-lacivert-1.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Bej Lacivert, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-bej-lacivert-2.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Bej Lacivert, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-bej-lacivert-3.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Bej Lacivert, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-bej-lacivert-4.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Bej Lacivert, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-bej-lacivert-5.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Bej Lacivert, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-bej-lacivert-6.jpg",
+        "width": 1200,
+        "height": 1600,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Bej Lacivert, model üzerinde"
+      }
+    ],
+    "description": "Bej zemin üzerinde kıvrılan badem dalları, lacivert bir kenarla çerçevelendi. Gün ışığında altın, akşam ışığında gri.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "sallar",
+      "van-gogh",
+      "hint-ipegi",
+      "yeni-gelenler",
+      "hediye"
+    ],
+    "isNew": true,
+    "createdAt": "2026-08-16"
+  },
+  {
+    "id": "hr-010",
+    "trendyolId": "1186994937",
+    "slug": "van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz",
+    "name": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Turkuaz",
+    "type": "sal",
+    "artist": {
+      "name": "Vincent van Gogh",
+      "slug": "van-gogh"
+    },
+    "artwork": {
+      "title": "Badem Çiçekleri",
+      "year": "1890",
+      "story": "Van Gogh bu tabloyu Şubat 1890'da, kardeşi Theo'nun oğlu doğduğunda boyadı. Mavi göğe uzanan çiçekli dallar yeni bir hayatın simgesiydi; tablo yıllarca bebeğin odasının duvarında asılı kaldı."
+    },
+    "fabric": "Hint ipeği",
+    "size": "70×175",
+    "priceKurus": 119900,
+    "stock": 3,
+    "colors": [
+      "turkuaz",
+      "mavi",
+      "beyaz"
+    ],
+    "images": [
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz-1.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Turkuaz, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz-2.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Turkuaz, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz-3.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Turkuaz, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz-4.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Turkuaz, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz-5.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Turkuaz, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz-6.jpg",
+        "width": 712,
+        "height": 1600,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Turkuaz, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz-7.jpg",
+        "width": 1200,
+        "height": 1600,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Turkuaz, model üzerinde"
+      }
+    ],
+    "description": "Tablonun asıl renkleri: turkuaz gökyüzü, beyaz çiçekler, koyu dallar. Desenin en klasik hâli.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "sallar",
+      "van-gogh",
+      "hint-ipegi",
+      "yeni-gelenler",
+      "hediye"
+    ],
+    "isNew": true,
+    "createdAt": "2026-08-16"
+  },
+  {
+    "id": "hr-011",
+    "trendyolId": "1186994940",
+    "slug": "van-gogh-badem-cicegi-hint-ipegi-sal-70x175-gri-mavi",
+    "name": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Gri Mavi",
+    "type": "sal",
+    "artist": {
+      "name": "Vincent van Gogh",
+      "slug": "van-gogh"
+    },
+    "artwork": {
+      "title": "Badem Çiçekleri",
+      "year": "1890",
+      "story": "Van Gogh bu tabloyu Şubat 1890'da, kardeşi Theo'nun oğlu doğduğunda boyadı. Mavi göğe uzanan çiçekli dallar yeni bir hayatın simgesiydi; tablo yıllarca bebeğin odasının duvarında asılı kaldı."
+    },
+    "fabric": "Hint ipeği",
+    "size": "70×175",
+    "priceKurus": 119900,
+    "stock": 1,
+    "colors": [
+      "gri",
+      "mavi",
+      "taba"
+    ],
+    "images": [
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-gri-mavi-1.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Gri Mavi, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-gri-mavi-2.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Gri Mavi, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-gri-mavi-3.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Gri Mavi, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-gri-mavi-4.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Gri Mavi, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-gri-mavi-5.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Gri Mavi, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-gri-mavi-6.jpg",
+        "width": 1200,
+        "height": 1600,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Gri Mavi, model üzerinde"
+      }
+    ],
+    "description": "Sisli bir gri-mavi zeminde badem çiçekleri, taba renginde bir bordürle. Kışlık paltoların üzerinde çok yakışır.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "sallar",
+      "van-gogh",
+      "hint-ipegi",
+      "yeni-gelenler"
+    ],
+    "isNew": true,
+    "createdAt": "2026-08-16"
+  },
+  {
+    "id": "hr-012",
+    "trendyolId": "1193548845",
+    "slug": "van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz-somon",
+    "name": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Turkuaz Somon",
+    "type": "sal",
+    "artist": {
+      "name": "Vincent van Gogh",
+      "slug": "van-gogh"
+    },
+    "artwork": {
+      "title": "Badem Çiçekleri",
+      "year": "1890",
+      "story": "Van Gogh bu tabloyu Şubat 1890'da, kardeşi Theo'nun oğlu doğduğunda boyadı. Mavi göğe uzanan çiçekli dallar yeni bir hayatın simgesiydi; tablo yıllarca bebeğin odasının duvarında asılı kaldı."
+    },
+    "fabric": "Hint ipeği",
+    "size": "70×175",
+    "priceKurus": 119900,
+    "stock": 2,
+    "colors": [
+      "turkuaz",
+      "somon",
+      "pembe"
+    ],
+    "images": [
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz-somon-1.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Turkuaz Somon, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz-somon-2.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Turkuaz Somon, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz-somon-3.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Turkuaz Somon, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz-somon-4.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Turkuaz Somon, manken üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz-somon-5.jpg",
+        "width": 1200,
+        "height": 1600,
+        "alt": "Van Gogh Badem Çiçeği Hint İpeği Şal 70×175 – Turkuaz Somon, model üzerinde"
+      }
+    ],
+    "description": "Turkuaz zemin üzerinde somon renkli dallar. Klasik desenin daha sıcak, daha neşeli bir yorumu.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "sallar",
+      "van-gogh",
+      "hint-ipegi",
+      "yeni-gelenler"
+    ],
+    "isNew": true,
+    "createdAt": "2026-08-30"
+  },
+  {
+    "id": "hr-013",
+    "trendyolId": "1186994950",
+    "slug": "sal-deseni-hint-ipegi-sal-70x175-zumrut",
+    "name": "Şal Deseni Hint İpeği Şal 70×175 – Zümrüt",
+    "type": "sal",
+    "artist": null,
+    "artwork": null,
+    "fabric": "Hint ipeği",
+    "size": "70×175",
+    "priceKurus": 119900,
+    "stock": 2,
+    "colors": [
+      "yeşil",
+      "zümrüt",
+      "mavi"
+    ],
+    "images": [
+      {
+        "src": "/urunler/sal-deseni-hint-ipegi-sal-70x175-zumrut-1.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Şal Deseni Hint İpeği Şal 70×175 – Zümrüt, manken üzerinde"
+      },
+      {
+        "src": "/urunler/sal-deseni-hint-ipegi-sal-70x175-zumrut-2.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Şal Deseni Hint İpeği Şal 70×175 – Zümrüt, manken üzerinde"
+      },
+      {
+        "src": "/urunler/sal-deseni-hint-ipegi-sal-70x175-zumrut-3.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Şal Deseni Hint İpeği Şal 70×175 – Zümrüt, manken üzerinde"
+      },
+      {
+        "src": "/urunler/sal-deseni-hint-ipegi-sal-70x175-zumrut-4.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Şal Deseni Hint İpeği Şal 70×175 – Zümrüt, manken üzerinde"
+      },
+      {
+        "src": "/urunler/sal-deseni-hint-ipegi-sal-70x175-zumrut-5.jpg",
+        "width": 1197,
+        "height": 1600,
+        "alt": "Şal Deseni Hint İpeği Şal 70×175 – Zümrüt, model üzerinde"
+      }
+    ],
+    "description": "Zümrüt ve mavi tonlarında geleneksel şal (paisley) deseni. Kenar bordürüyle tam bir el dokuması havası taşır.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "sallar",
+      "hint-ipegi",
+      "yeni-gelenler"
+    ],
+    "isNew": true,
+    "createdAt": "2026-08-16"
+  },
+  {
+    "id": "hr-014",
+    "trendyolId": "1194177342",
+    "slug": "sal-deseni-hint-ipegi-sal-70x175-lacivert",
+    "name": "Şal Deseni Hint İpeği Şal 70×175 – Lacivert",
+    "type": "sal",
+    "artist": null,
+    "artwork": null,
+    "fabric": "Hint ipeği",
+    "size": "70×175",
+    "priceKurus": 119900,
+    "stock": 0,
+    "colors": [
+      "lacivert",
+      "krem",
+      "bordo"
+    ],
+    "images": [
+      {
+        "src": "/urunler/sal-deseni-hint-ipegi-sal-70x175-lacivert-1.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Şal Deseni Hint İpeği Şal 70×175 – Lacivert, manken üzerinde"
+      },
+      {
+        "src": "/urunler/sal-deseni-hint-ipegi-sal-70x175-lacivert-2.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Şal Deseni Hint İpeği Şal 70×175 – Lacivert, manken üzerinde"
+      },
+      {
+        "src": "/urunler/sal-deseni-hint-ipegi-sal-70x175-lacivert-3.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Şal Deseni Hint İpeği Şal 70×175 – Lacivert, manken üzerinde"
+      },
+      {
+        "src": "/urunler/sal-deseni-hint-ipegi-sal-70x175-lacivert-4.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Şal Deseni Hint İpeği Şal 70×175 – Lacivert, model üzerinde"
+      }
+    ],
+    "description": "Lacivert, krem ve bordo tonlarında klasik şal deseni. Takım elbiseden kabana, resmi kıyafetlerle iyi anlaşır.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "sallar",
+      "hint-ipegi"
+    ],
+    "isNew": false,
+    "createdAt": "2026-08-31"
+  },
+  {
+    "id": "hr-015",
+    "trendyolId": "1205992298",
+    "slug": "van-gogh-badem-cicegi-ipek-esarp-95x95-yesil",
+    "name": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Yeşil",
+    "type": "esarp",
+    "artist": {
+      "name": "Vincent van Gogh",
+      "slug": "van-gogh"
+    },
+    "artwork": {
+      "title": "Badem Çiçekleri",
+      "year": "1890",
+      "story": "Van Gogh bu tabloyu Şubat 1890'da, kardeşi Theo'nun oğlu doğduğunda boyadı. Mavi göğe uzanan çiçekli dallar yeni bir hayatın simgesiydi; tablo yıllarca bebeğin odasının duvarında asılı kaldı."
+    },
+    "fabric": "İpek",
+    "size": "95×95",
+    "priceKurus": 109900,
+    "stock": 2,
+    "colors": [
+      "yeşil",
+      "pembe"
+    ],
+    "images": [
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-yesil-1.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Yeşil, başta bağlı, model üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-yesil-2.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Yeşil, serili, yakın plan"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-yesil-3.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Yeşil, serili, yakın plan"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-yesil-4.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Yeşil, serili, yakın plan"
+      }
+    ],
+    "description": "Yeşil zeminde pembe badem çiçekleri, koyu yeşil kenar. Başta, boyunda ya da çantada.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "esarplar",
+      "van-gogh",
+      "yeni-gelenler",
+      "hediye"
+    ],
+    "isNew": true,
+    "createdAt": "2026-10-18"
+  },
+  {
+    "id": "hr-016",
+    "trendyolId": "1205996360",
+    "slug": "van-gogh-badem-cicegi-ipek-esarp-95x95-kahve",
+    "name": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Kahve",
+    "type": "esarp",
+    "artist": {
+      "name": "Vincent van Gogh",
+      "slug": "van-gogh"
+    },
+    "artwork": {
+      "title": "Badem Çiçekleri",
+      "year": "1890",
+      "story": "Van Gogh bu tabloyu Şubat 1890'da, kardeşi Theo'nun oğlu doğduğunda boyadı. Mavi göğe uzanan çiçekli dallar yeni bir hayatın simgesiydi; tablo yıllarca bebeğin odasının duvarında asılı kaldı."
+    },
+    "fabric": "İpek",
+    "size": "95×95",
+    "priceKurus": 109900,
+    "stock": 1,
+    "colors": [
+      "kahve",
+      "altın",
+      "pembe"
+    ],
+    "images": [
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-kahve-1.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Kahve, başta bağlı, model üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-kahve-2.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Kahve, serili, yakın plan"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-kahve-3.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Kahve, serili, yakın plan"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-kahve-4.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Kahve, serili, yakın plan"
+      }
+    ],
+    "description": "Kahve ve altın tonlarında, sonbahar renkleriyle badem çiçekleri. Taba bordür.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "esarplar",
+      "van-gogh",
+      "yeni-gelenler"
+    ],
+    "isNew": true,
+    "createdAt": "2026-10-18"
+  },
+  {
+    "id": "hr-017",
+    "trendyolId": "1205994645",
+    "slug": "van-gogh-badem-cicegi-ipek-esarp-95x95-sari",
+    "name": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Sarı",
+    "type": "esarp",
+    "artist": {
+      "name": "Vincent van Gogh",
+      "slug": "van-gogh"
+    },
+    "artwork": {
+      "title": "Badem Çiçekleri",
+      "year": "1890",
+      "story": "Van Gogh bu tabloyu Şubat 1890'da, kardeşi Theo'nun oğlu doğduğunda boyadı. Mavi göğe uzanan çiçekli dallar yeni bir hayatın simgesiydi; tablo yıllarca bebeğin odasının duvarında asılı kaldı."
+    },
+    "fabric": "İpek",
+    "size": "95×95",
+    "priceKurus": 109900,
+    "stock": 1,
+    "colors": [
+      "sarı",
+      "kırmızı",
+      "mavi"
+    ],
+    "images": [
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-sari-1.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Sarı, başta bağlı, model üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-sari-2.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Sarı, serili, yakın plan"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-sari-3.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Sarı, serili, yakın plan"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-sari-4.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Sarı, serili, yakın plan"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-sari-5.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Sarı, serili, yakın plan"
+      }
+    ],
+    "description": "Sarı zemin, kırmızı bordür ve mavi dallar. Koleksiyonun en cesur eşarbı.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "esarplar",
+      "van-gogh",
+      "yeni-gelenler",
+      "hediye"
+    ],
+    "isNew": true,
+    "createdAt": "2026-10-18"
+  },
+  {
+    "id": "hr-018",
+    "trendyolId": "1205995293",
+    "slug": "van-gogh-badem-cicegi-ipek-esarp-95x95-pembe",
+    "name": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Pembe",
+    "type": "esarp",
+    "artist": {
+      "name": "Vincent van Gogh",
+      "slug": "van-gogh"
+    },
+    "artwork": {
+      "title": "Badem Çiçekleri",
+      "year": "1890",
+      "story": "Van Gogh bu tabloyu Şubat 1890'da, kardeşi Theo'nun oğlu doğduğunda boyadı. Mavi göğe uzanan çiçekli dallar yeni bir hayatın simgesiydi; tablo yıllarca bebeğin odasının duvarında asılı kaldı."
+    },
+    "fabric": "İpek",
+    "size": "95×95",
+    "priceKurus": 109900,
+    "stock": 2,
+    "colors": [
+      "pembe",
+      "fuşya",
+      "yeşil"
+    ],
+    "images": [
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-pembe-1.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Pembe, başta bağlı, model üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-pembe-2.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Pembe, serili, yakın plan"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-pembe-3.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Pembe, serili, yakın plan"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-pembe-4.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Pembe, serili, yakın plan"
+      }
+    ],
+    "description": "Pembe zeminde badem çiçekleri ve mürdüm bordür. Yumuşak ama dikkat çekici.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "esarplar",
+      "van-gogh",
+      "yeni-gelenler"
+    ],
+    "isNew": true,
+    "createdAt": "2026-10-18"
+  },
+  {
+    "id": "hr-019",
+    "trendyolId": "1205994971",
+    "slug": "van-gogh-badem-cicegi-ipek-esarp-95x95-lacivert",
+    "name": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Lacivert",
+    "type": "esarp",
+    "artist": {
+      "name": "Vincent van Gogh",
+      "slug": "van-gogh"
+    },
+    "artwork": {
+      "title": "Badem Çiçekleri",
+      "year": "1890",
+      "story": "Van Gogh bu tabloyu Şubat 1890'da, kardeşi Theo'nun oğlu doğduğunda boyadı. Mavi göğe uzanan çiçekli dallar yeni bir hayatın simgesiydi; tablo yıllarca bebeğin odasının duvarında asılı kaldı."
+    },
+    "fabric": "İpek",
+    "size": "95×95",
+    "priceKurus": 109900,
+    "stock": 3,
+    "colors": [
+      "lacivert",
+      "mavi",
+      "yeşil"
+    ],
+    "images": [
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-lacivert-1.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Lacivert, başta bağlı, model üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-lacivert-2.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Lacivert, serili, yakın plan"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-lacivert-3.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Lacivert, serili, yakın plan"
+      }
+    ],
+    "description": "Lacivert ve gece mavisi tonlarında badem çiçekleri. Her güne uyan, sakin bir eşarp.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "esarplar",
+      "van-gogh",
+      "yeni-gelenler"
+    ],
+    "isNew": true,
+    "createdAt": "2026-10-18"
+  },
+  {
+    "id": "hr-020",
+    "trendyolId": "1205993663",
+    "slug": "van-gogh-badem-cicegi-ipek-esarp-95x95-turkuaz",
+    "name": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Turkuaz",
+    "type": "esarp",
+    "artist": {
+      "name": "Vincent van Gogh",
+      "slug": "van-gogh"
+    },
+    "artwork": {
+      "title": "Badem Çiçekleri",
+      "year": "1890",
+      "story": "Van Gogh bu tabloyu Şubat 1890'da, kardeşi Theo'nun oğlu doğduğunda boyadı. Mavi göğe uzanan çiçekli dallar yeni bir hayatın simgesiydi; tablo yıllarca bebeğin odasının duvarında asılı kaldı."
+    },
+    "fabric": "İpek",
+    "size": "95×95",
+    "priceKurus": 109900,
+    "stock": 1,
+    "colors": [
+      "turkuaz",
+      "mavi",
+      "lila"
+    ],
+    "images": [
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-turkuaz-1.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Turkuaz, başta bağlı, model üzerinde"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-turkuaz-2.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Turkuaz, serili, yakın plan"
+      },
+      {
+        "src": "/urunler/van-gogh-badem-cicegi-ipek-esarp-95x95-turkuaz-3.jpg",
+        "width": 1200,
+        "height": 1591,
+        "alt": "Van Gogh Badem Çiçeği İpek Eşarp 95×95 – Turkuaz, serili, yakın plan"
+      }
+    ],
+    "description": "Turkuaz zemin ve lila çiçekler, tablonun gökyüzüne en yakın eşarp.",
+    "care": "Kuru temizleme önerilir. Gerekirse soğuk suda, ipek şampuanıyla elde yıkayın; ovmayın, sıkmayın. Gölgede kurutun, düşük ısıda ters yüzünden ütüleyin.",
+    "collections": [
+      "esarplar",
+      "van-gogh",
+      "yeni-gelenler",
+      "hediye"
+    ],
+    "isNew": true,
+    "createdAt": "2026-10-18"
+  },
+  {
+    "id": "hr-021",
+    "trendyolId": "958623094",
+    "slug": "figurlu-pamuk-pareo",
+    "name": "Figürlü Pamuk Pareo",
+    "type": "pareo",
+    "artist": null,
+    "artwork": null,
+    "fabric": "%100 pamuk",
+    "size": "Standart",
+    "priceKurus": 85000,
+    "stock": 2,
+    "colors": [
+      "beyaz",
+      "kırmızı",
+      "sarı"
+    ],
+    "images": [
+      {
+        "src": "/urunler/figurlu-pamuk-pareo-1.jpg",
+        "width": 779,
+        "height": 1600,
+        "alt": "Figürlü Pamuk Pareo, model üzerinde"
+      },
+      {
+        "src": "/urunler/figurlu-pamuk-pareo-2.jpg",
+        "width": 711,
+        "height": 1600,
+        "alt": "Figürlü Pamuk Pareo, manken üzerinde"
+      },
+      {
+        "src": "/urunler/figurlu-pamuk-pareo-3.jpg",
+        "width": 711,
+        "height": 1600,
+        "alt": "Figürlü Pamuk Pareo, manken üzerinde"
+      }
+    ],
+    "description": "Beyaz pamuk üzerinde renkli figürlerden bir bordür. Plajda, tatilde, yazın serin akşamlarında.",
+    "care": "30°C'de hassas programda yıkayın. Ters çevirerek gölgede kurutun. Orta ısıda ütüleyebilirsiniz.",
+    "collections": [],
+    "isNew": false,
+    "createdAt": "2026-07-17"
+  }
+]

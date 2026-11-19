@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hera — Yön 1: Galeri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600&display=swap&subset=latin-ext" rel="stylesheet">
+<!--
+  YÖN 1 — GALERİ
+  Konsept: Her şal duvarda tek başına asılı bir eser; site bir sergi salonu gibi davranır.
+  Token'lar: duvar #F5F3EE · mürekkep #171614 · etiket-gri #6E6A64 · kırmızı-nokta #B0352A
+  Yazı: Newsreader (başlık) + Hanken Grotesk (etiket/gövde) — ikisi de latin-ext (ı ş ğ İ) destekli.
+-->
+<style>
+  :root{
+    --duvar:#F5F3EE; --murekkep:#171614; --etiket:#6E6A64; --nokta:#B0352A;
+    --cizgi:#DCD8D0;
+    --serif:"Newsreader", Georgia, serif;
+    --sans:"Hanken Grotesk", "Helvetica Neue", sans-serif;
+    --g:16px;
+  }
+  @media (min-width:768px){ :root{ --g:48px; } }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--duvar);color:var(--murekkep);font-family:var(--sans);font-size:16px;line-height:1.55;overflow-x:hidden}
+  img{display:block;width:100%;height:100%;object-fit:cover}
+  a{color:inherit;text-decoration:none}
+  .wrap{padding:0 var(--g);max-width:1440px;margin:0 auto}
+
+  /* Üst bant + başlık */
+  .duyuru{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--etiket);text-align:center;padding:10px var(--g);border-bottom:1px solid var(--cizgi)}
+  header.site{display:flex;align-items:baseline;justify-content:space-between;padding:22px var(--g)}
+  .logo{font-family:var(--serif);font-size:26px;letter-spacing:.02em}
+  .logo i{font-style:italic;color:var(--etiket);font-size:16px;margin-left:8px}
+  nav.ana{display:none;gap:36px;font-size:14px}
+  nav.ana a{padding-bottom:2px;border-bottom:1px solid transparent}
+  nav.ana a:hover{border-color:var(--murekkep)}
+  .sepet{font-size:14px}
+  .ust-sag{display:flex;gap:20px;align-items:baseline;font-size:14px}
+  .wa{color:var(--etiket);border-bottom:1px solid var(--cizgi);padding-bottom:1px}
+  .wa:hover{color:var(--murekkep);border-color:var(--murekkep)}
+  @media (min-width:900px){ nav.ana{display:flex} }
+
+  /* Kumaş etiketi (kart) */
+  .kumas{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--etiket);border:1px solid var(--cizgi);padding:1px 6px;border-radius:2px;font-weight:500}
+
+  /* Mobil sabit satın alma çubuğu */
+  .yapiskan{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--duvar);border-top:1px solid var(--cizgi);padding:10px var(--g) calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:14px;transform:translateY(110%);transition:transform .3s ease}
+  .yapiskan.acik{transform:none}
+  .yapiskan .y-ad{flex:1;min-width:0;font-size:12px;line-height:1.3;color:var(--etiket)}
+  .yapiskan .y-ad b{display:block;font-size:15px;color:var(--murekkep);font-weight:500}
+  .yapiskan button{background:var(--murekkep);color:var(--duvar);border:0;border-radius:2px;padding:13px 22px;font:500 14px var(--sans);letter-spacing:.04em}
+  @media (min-width:900px){ .yapiskan{display:none} }
+
+  /* Bölüm ayıracı (keşif dosyası için) */
+  .bolum{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--etiket);padding:56px var(--g) 16px;display:flex;gap:12px;align-items:center}
+  .bolum::after{content:"";flex:1;height:1px;background:var(--cizgi)}
+
+  /* HERO — sola yaslı tek eser, sağda boşluk ve duvar etiketi */
+  .hero{display:grid;grid-template-columns:1fr;gap:28px;padding:8px var(--g) 40px}
+  .hero .eser{aspect-ratio:4/5;background:#EAE6DF;overflow:hidden}
+  .hero .eser img{object-position:50% 30%}
+  .hero h1{font-family:var(--serif);font-weight:300;font-size:44px;line-height:1.02;letter-spacing:-.01em}
+  .hero h1 em{font-style:italic}
+  .hero p.giris{color:var(--etiket);max-width:34ch;margin-top:18px}
+  .etiket{border-left:1px solid var(--murekkep);padding:2px 0 2px 14px;font-size:13px;line-height:1.5;max-width:260px}
+  .etiket b{display:block;font-weight:600}
+  .etiket .eserad{font-family:var(--serif);font-style:italic;font-size:16px}
+  .etiket .alt{color:var(--etiket)}
+  .lnk{display:inline-block;margin-top:26px;font-size:14px;border-bottom:1px solid var(--murekkep);padding-bottom:3px}
+  @media (min-width:900px){
+    .hero{grid-template-columns:repeat(12,1fr);gap:0 24px;padding-top:24px;min-height:calc(100vh - 120px);align-items:end}
+    .hero .eser{grid-column:2 / 8;grid-row:1 / 3;aspect-ratio:auto;height:min(78vh,760px)}
+    .hero .metin{grid-column:9 / 13;grid-row:1;align-self:start;padding-top:8vh}
+    .hero h1{font-size:72px}
+    .hero .etiket{grid-column:9 / 12;grid-row:2;align-self:end;margin-bottom:6px}
+  }
+
+  /* IZGARA — asimetrik asılış */
+  .sergi{padding:0 var(--g) 40px}
+  .sergi-bas{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:28px;gap:16px}
+  .sergi-bas h2{font-family:var(--serif);font-weight:300;font-size:32px;line-height:1.1}
+  .sergi-bas span{font-size:13px;color:var(--etiket)}
+  .izgara{display:grid;grid-template-columns:1fr 1fr;gap:32px 16px}
+  .kart .gorsel{aspect-ratio:4/5;background:#EAE6DF;overflow:hidden;position:relative}
+  .kart .gorsel img{transition:transform .8s ease}
+  .kart:hover .gorsel img{transform:scale(1.03)}
+  .kart .lbl{margin-top:12px;font-size:12.5px;line-height:1.45}
+  .kart .no{font-size:11px;letter-spacing:.1em;color:var(--etiket)}
+  .kart .ad{font-family:var(--serif);font-size:17px;line-height:1.25;margin:2px 0 4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .kart .ad i{font-style:italic}
+  .kart .alt{color:var(--etiket)}
+  .kart .fiyat{margin-top:6px;font-weight:500;display:flex;align-items:center;gap:8px}
+  .nokta{width:10px;height:10px;border-radius:50%;background:var(--nokta);display:inline-block}
+  .durum{font-size:11.5px;color:var(--nokta)}
+  @media (min-width:900px){
+    .sergi-bas h2{font-size:44px}
+    .izgara{grid-template-columns:repeat(12,1fr);gap:0 24px;align-items:start}
+    .kart:nth-child(1){grid-column:1 / 5}
+    .kart:nth-child(2){grid-column:6 / 9;margin-top:180px}
+    .kart:nth-child(3){grid-column:10 / 13;margin-top:40px}
+    a.kart:nth-of-type(4){grid-column:2 / 6;grid-row:2;margin-top:56px}
+    .kart:nth-child(2) .gorsel,.kart:nth-child(3) .gorsel{aspect-ratio:3/4}
+    .kart .ad{font-size:19px}
+    .sergi-not{grid-column:8 / 12;grid-row:2;margin-top:80px;font-family:var(--serif);font-size:24px;font-weight:300;line-height:1.35;font-style:italic;color:var(--etiket)}
+  }
+  .sergi-not{display:none}
+  @media (min-width:900px){ .sergi-not{display:block} }
+
+  /* ÜRÜN DETAY */
+  .detay{display:grid;grid-template-columns:1fr;gap:24px;padding:0 var(--g) 80px}
+  .galeri-ana{aspect-ratio:4/5;background:#EAE6DF;overflow:hidden}
+  .kucukler{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+  .kucukler button{flex:0 0 64px;aspect-ratio:2/3;border:0;padding:0;background:#EAE6DF;cursor:pointer;opacity:.55;outline:1px solid transparent;outline-offset:2px}
+  .kucukler button[aria-current="true"]{opacity:1;outline-color:var(--murekkep)}
+  .kirinti{font-size:12px;color:var(--etiket);margin-bottom:14px}
+  .detay h1{font-family:var(--serif);font-weight:300;font-size:34px;line-height:1.08}
+  .detay h1 i{font-style:italic}
+  .fiyatsat{display:flex;align-items:baseline;gap:12px;margin:18px 0 6px}
+  .fiyatsat .f{font-size:22px;font-weight:500}
+  .fiyatsat s{color:var(--etiket);font-size:14px}
+  .stok{font-size:13px;color:var(--nokta);display:flex;align-items:center;gap:8px}
+  .btn{display:block;width:100%;margin-top:22px;background:var(--murekkep);color:var(--duvar);border:0;border-radius:2px;padding:17px 20px;font:500 15px var(--sans);letter-spacing:.04em;cursor:pointer}
+  .btn:hover{background:#000}
+  .btn2{display:block;width:100%;margin-top:10px;background:transparent;color:var(--murekkep);border:1px solid var(--murekkep);border-radius:2px;padding:15px 20px;font:500 14px var(--sans);cursor:pointer}
+  .hizmet{margin-top:18px;font-size:13px;color:var(--etiket);display:grid;gap:4px;justify-items:start}
+  .hizmet .wa{margin-top:6px;color:var(--murekkep);border-color:var(--murekkep)}
+  .ikinci{font-size:13px;margin-top:8px;color:var(--murekkep)}
+  .kart .durum{margin-left:2px}
+  /* Müze künyesi */
+  .kunye{margin-top:36px;background:#FFFFFF;padding:22px 22px 18px;border:1px solid var(--cizgi)}
+  .kunye .k-sanatci{font-weight:600;font-size:15px}
+  .kunye .k-yasam{color:var(--etiket);font-size:13px}
+  .kunye .k-eser{font-family:var(--serif);font-style:italic;font-size:22px;line-height:1.2;margin:10px 0 2px}
+  .kunye dl{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:13px;margin-top:14px;padding-top:14px;border-top:1px solid var(--cizgi)}
+  .kunye dt{color:var(--etiket)}
+  .kunye .k-not{font-size:13px;margin-top:14px;color:var(--etiket);line-height:1.55}
+  @media (min-width:900px){
+    .detay{grid-template-columns:repeat(12,1fr);gap:0 24px;align-items:start}
+    .detay .sol{grid-column:1 / 8;display:grid;grid-template-columns:72px 1fr;gap:16px}
+    .kucukler{flex-direction:column;overflow:visible}
+    .kucukler button{flex:none;width:72px}
+    .galeri-ana{aspect-ratio:auto;height:min(86vh,860px)}
+    .detay .sag{grid-column:9 / 13;position:sticky;top:24px;padding-top:12px}
+    .detay h1{font-size:44px}
+  }
+  footer{border-top:1px solid var(--cizgi);padding:28px var(--g);font-size:12px;color:var(--etiket);display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+</style>
+</head>
+<body>
+  <div class="duyuru">1.000 TL üzeri ücretsiz kargo · Her sipariş hediye kutusunda</div>
+  <header class="site">
+    <a class="logo" href="#">Hera<i>İzmir</i></a>
+    <nav class="ana"><a href="#sergi">Sergi</a><a href="#">Şallar</a><a href="#">Eşarplar</a><a href="#">Sanatçılar</a><a href="#">Hediye</a></nav>
+    <div class="ust-sag"><!-- WhatsApp numarası eklenecek: https://wa.me/90XXXXXXXXXX --><a class="wa" href="#">WhatsApp</a><a class="sepet" href="#">Sepet (0)</a></div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" aria-label="Kapak">
+    <figure class="eser"><img src="../public/ornek/kirpik/ipek-sal-van-gogh-badem-agaci-desenli-sal-1131158434-4.jpg" alt="Van Gogh Badem Ağacı desenli ipek şal, manken üzerinde"></figure>
+    <div class="metin">
+      <h1>Duvardan<br><em>omuza.</em></h1>
+      <p class="giris">Van Gogh’tan Klimt’e, sevdiğimiz tabloları ipeğe taşıyoruz. Her desenden yalnızca birkaç parça.</p>
+      <a class="lnk" href="#sergi">Kış sergisini gez →</a>
+    </div>
+    <div class="etiket">
+      <b>Vincent van Gogh</b>
+      <span class="alt">Hollandalı, 1853–1890</span><br>
+      <span class="eserad">Badem Çiçekleri, 1890</span><br>
+      <span class="alt">İpek şal üzerine baskı · 70×180 cm</span>
+    </div>
+  </section>
+
+  <div class="bolum" id="sergi">Ürün ızgarası</div>
+  <section class="sergi" aria-label="Sergideki eserler">
+    <div class="sergi-bas"><h2>Kış sergisi</h2><span>4 eser · 2 sanatçı</span></div>
+    <div class="izgara">
+      <a class="kart" href="#detay">
+        <div class="gorsel"><img src="../public/ornek/kirpik/ipek-sal-van-gogh-badem-agaci-desenli-sal-1131158434-5.jpg" alt="Van Gogh Badem Ağacı ipek şal"></div>
+        <div class="lbl"><div class="no">No. 01</div><div class="ad">Van Gogh <i>Badem Ağacı</i> İpek Şal 70×180</div><div class="alt">Vincent van Gogh, 1890</div><div class="fiyat">1.199 TL <span class="kumas">İpek</span></div></div>
+      </a>
+      <a class="kart" href="#">
+        <div class="gorsel"><img src="../public/ornek/kirpik/ipek-sal-gustav-klimt-cicek-bahesi-1137980014-3.jpg" alt="Klimt Çiçek Bahçesi ipek şal"></div>
+        <div class="lbl"><div class="no">No. 02</div><div class="ad">Klimt <i>Çiçek Bahçesi</i> İpek Şal 70×180</div><div class="alt">Gustav Klimt, 1907</div><div class="fiyat">1.199 TL <span class="kumas">İpek</span> <span class="durum">Son 1 adet</span></div></div>
+      </a>
+      <a class="kart" href="#">
+        <div class="gorsel"><img src="../public/ornek/kirpik/van-gogh-irises-zambaklar-tablolu-ipek-sal-1065255512-5.jpg" alt="Van Gogh Zambaklar ipek şal"></div>
+        <div class="lbl"><div class="no">No. 03</div><div class="ad">Van Gogh <i>Zambaklar</i> İpek Şal 65×190</div><div class="alt">Vincent van Gogh, 1889</div><div class="fiyat"><span class="nokta" aria-hidden="true"></span> Satıldı</div></div>
+      </a>
+      <p class="sergi-not">“Kırmızı nokta, galerilerde eserin yeni sahibini bulduğunu söyler. Bizde de öyle: her desenden yalnızca birkaç parça var.”</p>
+      <a class="kart" href="#">
+        <div class="gorsel"><img src="../public/ornek/kirpik/ipek-esarp-1205994645-1.jpg" alt="Van Gogh Badem Çiçeği ipek eşarp, başta bağlı"></div>
+        <div class="lbl"><div class="no">No. 04</div><div class="ad">Van Gogh <i>Badem Çiçeği</i> İpek Eşarp 95×95</div><div class="alt">Vincent van Gogh, 1890</div><div class="fiyat">1.099 TL <span class="kumas">İpek</span></div></div>
+      </a>
+    </div>
+  </section>
+
+  <div class="bolum" id="detay">Ürün detay</div>
+  <section class="detay" aria-label="Ürün detayı">
+    <div class="sol">
+      <div class="kucukler" role="tablist" aria-label="Görseller">
+        <button aria-current="true" data-src="../public/ornek/kirpik/ipek-sal-van-gogh-badem-agaci-desenli-sal-1131158434-4.jpg"><img src="../public/ornek/kirpik/ipek-sal-van-gogh-badem-agaci-desenli-sal-1131158434-4.jpg" alt=""></button>
+        <button data-src="../public/ornek/kirpik/ipek-sal-van-gogh-badem-agaci-desenli-sal-1131158434-5.jpg"><img src="../public/ornek/kirpik/ipek-sal-van-gogh-badem-agaci-desenli-sal-1131158434-5.jpg" alt=""></button>
+        <button data-src="../public/ornek/kirpik/ipek-sal-van-gogh-badem-agaci-desenli-sal-1131158434-2.jpg"><img src="../public/ornek/kirpik/ipek-sal-van-gogh-badem-agaci-desenli-sal-1131158434-2.jpg" alt=""></button>
+        <button data-src="../public/ornek/kirpik/ipek-sal-van-gogh-badem-agaci-desenli-sal-1131158434-3.jpg"><img src="../public/ornek/kirpik/ipek-sal-van-gogh-badem-agaci-desenli-sal-1131158434-3.jpg" alt=""></button>
+        <button data-src="../public/ornek/kirpik/ipek-sal-van-gogh-badem-agaci-desenli-sal-1131158434-1.jpg"><img src="../public/ornek/kirpik/ipek-sal-van-gogh-badem-agaci-desenli-sal-1131158434-1.jpg" alt=""></button>
+      </div>
+      <figure class="galeri-ana"><img id="ana" src="../public/ornek/kirpik/ipek-sal-van-gogh-badem-agaci-desenli-sal-1131158434-4.jpg" alt="Van Gogh Badem Ağacı desenli ipek şal, manken üzerinde"></figure>
+    </div>
+    <div class="sag">
+      <div class="kirinti">Sergi / Şallar / Van Gogh</div>
+      <h1>Van Gogh <i>Badem Ağacı</i> İpek Şal 70×180</h1>
+      <div class="fiyatsat"><span class="f">1.199 TL</span></div>
+      <div class="stok"><span class="nokta" aria-hidden="true"></span>Bu desenden son 1 adet</div>
+      <p class="ikinci">İkinci parçada %15 indirim · sepette uygulanır</p>
+      <button class="btn">Sepete ekle</button>
+      <button class="btn2">Hediye kutusu ve not ekle</button>
+      <div class="hizmet"><span>Yarın kargoda · İzmir’den gönderilir</span><span>14 gün içinde koşulsuz iade</span><a class="wa" href="#">Bu desen hakkında WhatsApp’tan sorun →</a></div>
+
+      <aside class="kunye" aria-label="Eser künyesi">
+        <div class="k-sanatci">Vincent van Gogh</div>
+        <div class="k-yasam">Hollandalı, 1853–1890</div>
+        <div class="k-eser">Badem Çiçekleri</div>
+        <div class="k-yasam">1890 · Tuval üzerine yağlı boya · Van Gogh Müzesi, Amsterdam</div>
+        <dl>
+          <dt>Kumaş</dt><dd>%100 ipek (vual veya viskon değil)</dd>
+          <dt>Ölçü</dt><dd>70 × 180 cm</dd>
+          <dt>Kenar</dt><dd>El ile kıvrılmış</dd>
+          <dt>Bakım</dt><dd>Kuru temizleme</dd>
+        </dl>
+        <p class="k-not">Van Gogh bu tabloyu yeğeninin doğumu için yaptı: mavi göğe uzanan çiçekli dallar, yeni bir hayata hediye. Şal da o yüzden en çok hediye olarak seçilen desenimiz.</p>
+      </aside>
+    </div>
+  </section>
+
+  <div class="yapiskan" id="yapiskan" aria-hidden="true"><div class="y-ad"><b>1.199 TL</b>Badem Ağacı İpek Şal · Son 1 adet</div><button>Sepete ekle</button></div>
+
+  <footer><span>Hera Mağaza · İzmir · Işıl Şağdış Ğ İ ı ş ğ ü ö ç</span><span>@hera_magaza</span></footer>
+
+<script>
+  const ana=document.getElementById('ana');
+  document.querySelectorAll('.kucukler button').forEach(b=>b.addEventListener('click',()=>{
+    ana.src=b.dataset.src;
+    document.querySelectorAll('.kucukler button').forEach(x=>x.setAttribute('aria-current',x===b));
+  }));
+  // Mobil: asıl "Sepete ekle" görünmez olunca alttaki çubuk açılır
+  const asil=document.querySelector('.detay .btn'), cubuk=document.getElementById('yapiskan'), detay=document.getElementById('detay');
+  if('IntersectionObserver' in window){
+    let detayGorunur=false, btnGorunur=false;
+    const guncelle=()=>{const ac=detayGorunur&&!btnGorunur;cubuk.classList.toggle('acik',ac);cubuk.setAttribute('aria-hidden',!ac);};
+    new IntersectionObserver(e=>{btnGorunur=e[0].isIntersecting;guncelle();}).observe(asil);
+    new IntersectionObserver(e=>{detayGorunur=e[0].isIntersecting;guncelle();}).observe(document.querySelector('.detay'));
+  }
+</script>
+</body>
+</html>
