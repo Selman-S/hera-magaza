@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { ButtonLink } from "@/components/ui/button";
 import { ProductGridSkeleton } from "@/components/ui/skeleton";
 import { FilterBar } from "@/components/shop/filters";
+import { TrackViewItemList } from "@/components/shop/analytics";
 import { ProductGrid } from "@/components/shop/product-card";
 import {
   getAllCollectionSlugs,
@@ -60,6 +61,10 @@ async function Results({ slug, searchParams }: { slug: string; searchParams: Pro
   return (
     <>
       <FilterBar options={options} total={products.length} activeCount={active} />
+      <TrackViewItemList
+        listName={`koleksiyon:${slug}`}
+        items={products.map((p) => ({ id: p.id, name: p.name, priceKurus: p.priceKurus, category: p.type, artist: p.artist?.name }))}
+      />
       <div className="mt-8">
         {products.length > 0 ? (
           <ProductGrid products={products} />

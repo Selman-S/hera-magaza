@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
 import { ProductGrid } from "@/components/shop/product-card";
 import { NewsletterForm } from "@/components/shop/newsletter-form";
+import { TrackViewItemList } from "@/components/shop/analytics";
 import { IconArrow, IconInstagram } from "@/components/shop/icons";
 import { getCollections, getModelShots, getProductBySlug, getProducts } from "@/lib/data/catalog";
 import { getReviews } from "@/lib/data/content";
@@ -148,6 +149,7 @@ export default async function HomePage() {
           </Link>
         </div>
         <ProductGrid products={mixed} />
+        <TrackViewItemList listName="anasayfa:yeni-gelenler" items={mixed.map((p) => ({ id: p.id, name: p.name, priceKurus: p.priceKurus, category: p.type, artist: p.artist?.name }))} />
       </section>
 
       {/* NEDEN HERA */}

@@ -5,12 +5,20 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CartLineItem, CouponForm, FreeShippingBar, TotalsTable, useCartSync, useCartTotals } from "@/components/shop/cart-parts";
 import { useCart, useCartHydrated } from "@/lib/cart/store";
 import { settings } from "@/lib/settings";
+import { useEffect, useRef } from "react";
+import { analytics } from "@/lib/analytics";
 
 export function CartPageClient() {
   const hydrated = useCartHydrated();
   const lines = useCart((s) => s.lines);
   const totals = useCartTotals();
   useCartSync();
+  const viewed = useRef(false);
+  useEffect(() => {
+    if (!hydrated || viewed.current || lines.length === 0) return;
+    viewed.current = true;
+    analytics.viewCart(lines.map((l) => ({ id: l.productId, name: l.name, priceKurus: l.priceKurus, quantity: l.quantity })), totals.subtotalKurus);
+  }, [hydrated, lines, totals.subtotalKurus]);
 
   if (!hydrated) {
     return (

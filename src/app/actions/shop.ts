@@ -5,6 +5,8 @@
  */
 import { and, eq, sql } from "drizzle-orm";
 import { updateTag } from "next/cache";
+import { after } from "next/server";
+import { createElement } from "react";
 import { cookies, headers } from "next/headers";
 import { z } from "zod";
 import { getDb } from "@/lib/db";
@@ -16,6 +18,10 @@ import { createOrder, type CreateOrderResult } from "@/lib/orders/create";
 import type { CheckoutInput } from "@/lib/checkout/schema";
 import { rateLimit } from "@/lib/rate-limit";
 import { ORDER_COOKIE } from "@/lib/checkout/order";
+import { runOrderEffects } from "@/lib/orders/effects";
+import { sendEmail } from "@/lib/integrations/email";
+import { NewsletterConfirm } from "@/lib/integrations/email/templates";
+import { siteUrl } from "@/lib/site-url";
 
 async function clientInfo() {
   const h = await headers();
@@ -50,6 +56,10 @@ export async function placeOrder(input: {
       path: "/",
       maxAge: 60 * 60 * 24,
     });
+    const db = getDb();
+    const orderId = result.orderId;
+    // E-posta ve Trendyol kuyruğu yanıtı geciktirmesin.
+    after(() => runOrderEffects(db, orderId, "created"));
   }
   return result;
 }
@@ -70,7 +80,7 @@ export async function subscribeNewsletter(rawEmail: string, consent: boolean, so
   await db
     .insert(s.newsletterSubscribers)
     .values({ email: email.data, source })
-    .onConflictDoUpdate({ target: s.newsletterSubscribers.email, set: { unsubscribedAt: null, consentAt: sql`now()` } });
+    .onConflictDoUpdate({ target: s.newsletterSubscribers.email, set: { unsubscribedAt: null, consentAt: sql`now()`, confirmedAt: null } });
   await db.insert(s.consentLogs).values({
     email: email.data,
     type: "etk",
@@ -79,7 +89,9 @@ export async function subscribeNewsletter(rawEmail: string, consent: boolean, so
     ip: info.ip,
     userAgent: info.userAgent,
   });
-  // Faz 3: çift onay (double opt-in) e-postası gönderilecek.
+  // Çift onay: kayıt, e-postadaki bağlantıya tıklanınca etkinleşir.
+  const confirmUrl = `${siteUrl()}/bulten/onay?anahtar=${encodeURIComponent(sign(email.data, "newsletter"))}`;
+  after(() => sendEmail(db, { to: email.data, subject: "E-bülten kaydınızı onaylayın", template: "bulten-onay", react: createElement(NewsletterConfirm, { confirmUrl }) }));
   return { ok: true };
 }
 

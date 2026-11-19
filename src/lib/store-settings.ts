@@ -14,8 +14,19 @@ export const storeSettingsSchema = z.object({
   paymentMethods: z
     .object({ kart: z.boolean(), havale: z.boolean(), kapida: z.boolean() })
     .refine((m) => m.kart || m.havale || m.kapida, "En az bir ödeme yöntemi açık olmalı."),
-  /** Ödeme beklenen siparişin stoku kaç dakika tutulur. */
+  /** Ödeme beklenen siparişin stoku kaç dakika tutulur (kart). Havalede 24 saat uygulanır. */
   orderHoldMinutes: z.number().int().min(5).max(24 * 60),
+  /** Havale/EFT bilgileri (müşteriye e-postada ve sipariş sayfasında gösterilir). */
+  bank: z.object({
+    bankName: z.string().trim().max(60),
+    accountHolder: z.string().trim().max(100),
+    iban: z
+      .string()
+      .transform((v) => v.replace(/\s/g, "").toUpperCase())
+      .refine((v) => v === "" || /^TR\d{24}$/.test(v), "IBAN TR ile başlayan 26 karakter olmalı."),
+  }),
+  /** Yeni sipariş bildirimlerinin gideceği adres. */
+  adminNotifyEmail: z.union([z.literal(""), z.email("Geçerli bir e-posta yazın.")]),
 });
 export type StoreSettings = z.infer<typeof storeSettingsSchema>;
 
@@ -26,6 +37,8 @@ export const DEFAULT_STORE_SETTINGS: StoreSettings = {
   announcement: "Her sipariş hediye kutusunda",
   paymentMethods: { ...staticSettings.paymentMethods },
   orderHoldMinutes: 30,
+  bank: { bankName: "", accountHolder: "", iban: "" },
+  adminNotifyEmail: "",
 };
 
 export function parseStoreSettings(value: unknown): StoreSettings {

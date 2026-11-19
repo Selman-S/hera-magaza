@@ -13,6 +13,7 @@ import { cx } from "@/lib/cx";
 import { formatTRY } from "@/lib/money";
 import { settings } from "@/lib/settings";
 import { IconMinus, IconPlus } from "./icons";
+import { analytics } from "@/lib/analytics";
 import { useStoreSettings } from "./store-settings-provider";
 
 /** Sepetin gösterim toplamı (mağaza ayarlarıyla). Asıl toplam siparişte sunucuda hesaplanır. */
@@ -154,10 +155,18 @@ export function CartLineItem({ line, onNavigate }: { line: CartLine; onNavigate?
             size="sm"
             value={line.quantity}
             max={line.stock}
-            onChange={(n) => setQuantity(line.productId, n)}
+            onChange={(n) => {
+              if (n < line.quantity) analytics.removeFromCart({ id: line.productId, name: line.name, priceKurus: line.priceKurus, quantity: line.quantity - n });
+              setQuantity(line.productId, n);
+            }}
             label={`${line.name} adedi`}
           />
-          <button type="button" onClick={() => remove(line.productId)} className="text-xs text-ink-muted underline underline-offset-2 hover:text-ink">
+          <button
+            type="button"
+            onClick={() => {
+              analytics.removeFromCart({ id: line.productId, name: line.name, priceKurus: line.priceKurus, quantity: line.quantity });
+              remove(line.productId);
+            }} className="text-xs text-ink-muted underline underline-offset-2 hover:text-ink">
             Kaldır
           </button>
         </div>
@@ -213,29 +222,27 @@ export function CouponForm() {
       </div>
     );
   }
+  // Ödeme sayfasında ana formun içinde durduğu için <form> değil; Enter ve düğme aynı işi yapar.
+  const apply = () => {
+    const code = value.trim();
+    if (!code) return;
+    // Kupon sunucuda, güncel sepet tutarıyla doğrulanır.
+    startTransition(async () => {
+      const { lines } = useCart.getState();
+      const priced = await validateCart({ ...cartInputOf(lines, null), couponCode: code });
+      if (priced.couponError || !priced.coupon) {
+        setError(priced.couponError ?? "Bu kupon kodu geçerli değil.");
+        return;
+      }
+      setError(null);
+      setValue("");
+      setCoupon(priced.coupon);
+      toast(`${priced.coupon.label} uygulandı.`, "success");
+    });
+  };
   return (
-    <form
-      className="flex flex-col gap-1.5"
-      onSubmit={(e) => {
-        e.preventDefault();
-        const code = value.trim();
-        if (!code) return;
-        // Kupon sunucuda, güncel sepet tutarıyla doğrulanır.
-        startTransition(async () => {
-          const { lines } = useCart.getState();
-          const priced = await validateCart({ ...cartInputOf(lines, null), couponCode: code });
-          if (priced.couponError || !priced.coupon) {
-            setError(priced.couponError ?? "Bu kupon kodu geçerli değil.");
-            return;
-          }
-          setError(null);
-          setValue("");
-          setCoupon(priced.coupon);
-          toast(`${priced.coupon.label} uygulandı.`, "success");
-        });
-      }}
-    >
-      <label htmlFor={inputId} className="text-sm">
+    <div className="flex flex-col gap-1.5" role="group" aria-labelledby={`${inputId}-etiket`}>
+      <label id={`${inputId}-etiket`} htmlFor={inputId} className="text-sm">
         Kupon kodu
       </label>
       <div className="flex gap-2">
@@ -243,12 +250,18 @@ export function CouponForm() {
           id={inputId}
           value={value}
           onChange={(e) => setValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              apply();
+            }
+          }}
           className="h-11 uppercase"
           autoComplete="off"
           aria-invalid={Boolean(error)}
           aria-describedby={error ? errorId : undefined}
         />
-        <Button type="submit" variant="secondary" className="h-11 shrink-0" disabled={pending}>
+        <Button type="button" variant="secondary" className="h-11 shrink-0" disabled={pending} onClick={apply}>
           {pending ? "…" : "Uygula"}
         </Button>
       </div>
@@ -257,7 +270,7 @@ export function CouponForm() {
           {error}
         </p>
       )}
-    </form>
+    </div>
   );
 }
 

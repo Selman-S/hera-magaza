@@ -11,6 +11,7 @@ import { cx } from "@/lib/cx";
 import { formatTRY } from "@/lib/money";
 import { settings, whatsappLink } from "@/lib/settings";
 import { QuantityStepper } from "./cart-parts";
+import { analytics } from "@/lib/analytics";
 import { useStoreSettings } from "./store-settings-provider";
 
 type PurchaseProduct = {
@@ -59,6 +60,7 @@ export function PurchasePanel({ product }: { product: PurchaseProduct }) {
       toast("Stokta yeterli ürün yok.", "error");
       return false;
     }
+    analytics.addToCart({ id: product.id, name: product.name, priceKurus: product.priceKurus, quantity: Math.min(quantity, available) });
     setQuantity(1);
     return true;
   };

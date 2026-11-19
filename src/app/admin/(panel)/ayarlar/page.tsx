@@ -22,6 +22,8 @@ export default async function SettingsPage() {
           announcement: st.announcement,
           paymentMethods: st.paymentMethods,
           orderHoldMinutes: String(st.orderHoldMinutes),
+          bank: st.bank,
+          adminNotifyEmail: st.adminNotifyEmail,
         }}
       />
     </>

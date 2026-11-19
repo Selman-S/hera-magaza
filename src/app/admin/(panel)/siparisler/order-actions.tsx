@@ -5,7 +5,7 @@ import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
 import { ORDER_STATUS_LABEL, ORDER_TRANSITIONS, type OrderStatus } from "@/lib/orders/status";
-import { addShipmentAction, changeOrderStatusAction, runExpiryCleanupAction, saveOrderNoteAction } from "../../actions";
+import { addShipmentAction, changeOrderStatusAction, createLabelAction, retryInvoiceAction, runExpiryCleanupAction, saveOrderNoteAction } from "../../actions";
 
 const DESTRUCTIVE: OrderStatus[] = ["cancelled", "refunded"];
 
@@ -135,5 +135,47 @@ export function CleanupButton() {
     >
       Süresi dolanları iptal et
     </button>
+  );
+}
+
+export function LabelButton({ orderId }: { orderId: number }) {
+  const router = useRouter();
+  const [pending, start] = useTransition();
+  return (
+    <Button
+      size="sm"
+      disabled={pending}
+      onClick={() =>
+        start(async () => {
+          const r = await createLabelAction(orderId);
+          toast(r.message ?? "", r.ok ? "success" : "error");
+          if (r.ok && r.labelUrl) window.open(r.labelUrl, "_blank", "noopener");
+          router.refresh();
+        })
+      }
+    >
+      {pending ? "Oluşturuluyor…" : "Kargo etiketi oluştur"}
+    </Button>
+  );
+}
+
+export function InvoiceRetryButton({ orderId }: { orderId: number }) {
+  const router = useRouter();
+  const [pending, start] = useTransition();
+  return (
+    <Button
+      size="sm"
+      variant="secondary"
+      disabled={pending}
+      onClick={() =>
+        start(async () => {
+          const r = await retryInvoiceAction(orderId);
+          toast(r.message ?? "", r.ok ? "success" : "error");
+          router.refresh();
+        })
+      }
+    >
+      Faturayı yeniden dene
+    </Button>
   );
 }

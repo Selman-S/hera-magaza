@@ -5,6 +5,7 @@ import { Accordion, AccordionItem } from "@/components/ui/accordion";
 import { Gallery } from "@/components/shop/gallery";
 import { ProductGrid, ProductName } from "@/components/shop/product-card";
 import { PurchasePanel } from "@/components/shop/purchase-panel";
+import { TrackViewItem } from "@/components/shop/analytics";
 import { getAllProductSlugs, getProductBySlug, getProductRedirect, getRelatedProducts } from "@/lib/data/catalog";
 import { getApprovedReviews, getStoreSettings } from "@/lib/data/store";
 import { PRODUCT_TYPE_LABEL, type ProductDetail } from "@/lib/data/schema";
@@ -80,6 +81,7 @@ export default async function ProductPage({ params }: PageProps<"/urun/[slug]">)
         // JSON-LD: içerik kendi verimizden; "<" kaçışlanır.
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd(product)).replace(/</g, "\\u003c") }}
       />
+      <TrackViewItem item={{ id: product.id, name: product.name, priceKurus: product.priceKurus, category: product.type, artist: product.artist?.name }} />
       <div className="container-shop pt-3 pb-8 lg:pt-6">
         <nav aria-label="Konum" className="mb-4 text-xs text-ink-muted lg:mb-6">
           <ol className="flex flex-wrap gap-1.5">

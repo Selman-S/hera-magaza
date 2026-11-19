@@ -48,7 +48,7 @@ export function ProductCard({
   const [first, second] = product.images;
   const soldOut = product.stock <= 0;
   return (
-    <Link href={`/urun/${product.slug}`} className={cx("group flex flex-col", className)}>
+    <Link href={`/urun/${product.slug}`} data-item-id={product.id} className={cx("group flex flex-col", className)}>
       <div className="relative aspect-[4/5] overflow-hidden bg-placeholder">
         <Image
           src={first.src}

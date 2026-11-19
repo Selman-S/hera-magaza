@@ -14,6 +14,8 @@ type Defaults = {
   announcement: string;
   paymentMethods: { kart: boolean; havale: boolean; kapida: boolean };
   orderHoldMinutes: string;
+  bank: { bankName: string; accountHolder: string; iban: string };
+  adminNotifyEmail: string;
 };
 
 export function SettingsForm({ defaults }: { defaults: Defaults }) {
@@ -44,6 +46,24 @@ export function SettingsForm({ defaults }: { defaults: Defaults }) {
             {({ id, describedBy }) => <Input id={id} name="orderHoldMinutes" inputMode="numeric" defaultValue={defaults.orderHoldMinutes} aria-describedby={describedBy} />}
           </Field>
         </div>
+      </Panel>
+      <Panel title="Havale / EFT bilgileri">
+        <div className="flex flex-col gap-4">
+          <Field label="Banka">
+            {({ id }) => <Input id={id} name="bankName" defaultValue={defaults.bank.bankName} />}
+          </Field>
+          <Field label="Hesap sahibi">
+            {({ id }) => <Input id={id} name="accountHolder" defaultValue={defaults.bank.accountHolder} />}
+          </Field>
+          <Field label="IBAN" error={e["bank.iban"]} hint="TR ile başlayan 26 karakter; müşteriye e-postada ve sipariş sayfasında gösterilir">
+            {({ id, describedBy, invalid }) => <Input id={id} name="iban" defaultValue={defaults.bank.iban} aria-describedby={describedBy} aria-invalid={invalid} className="font-mono" />}
+          </Field>
+        </div>
+      </Panel>
+      <Panel title="Bildirimler">
+        <Field label="Yeni sipariş bildirim e-postası" optional error={e.adminNotifyEmail} hint="Ödenen ve havale bekleyen her siparişte buraya özet gelir">
+          {({ id, describedBy, invalid }) => <Input id={id} name="adminNotifyEmail" type="email" defaultValue={defaults.adminNotifyEmail} aria-describedby={describedBy} aria-invalid={invalid} />}
+        </Field>
       </Panel>
       <Panel title="Duyuru bandı" className="lg:col-span-2">
         <Field label="Metin" error={e.announcement} hint="Sitenin en üstünde, ücretsiz kargo bilgisinin yanında görünür (en fazla 80 karakter)">

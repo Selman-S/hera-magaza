@@ -36,6 +36,8 @@ Her görev dokümanda bir ID taşır (ör. `F1-03`). Görev bitince ilgili dokü
 - `pnpm test:e2e` — Playwright; test veritabanını sıfırlar, derler, 3100 portunda çalışır
 - `pnpm db:generate` (şema değişince migration) · `pnpm db:migrate` · `pnpm db:seed` · `pnpm db:reset` (yalnızca yerel)
 - `pnpm admin:create` — yönetici hesabı oluştur / şifre yenile
+- Entegrasyonlar `src/lib/integrations/<ad>/`; env yoksa mock. Durum: yönetim paneli → Entegrasyonlar. Cron: `GET /api/cron/{expire-orders|trendyol|shipping|review-invites}` + `Authorization: Bearer $CRON_SECRET`.
+- Sipariş yan etkileri (e-posta, fatura, Trendyol kuyruğu) `lib/orders/effects.ts` → `runOrderEffects`; durum değiştiren her yerden `after()` ile çağrılır.
 - Next.js 16.4: Cache Components açık. `params`/`searchParams`/çerez okuyan kısımlar `<Suspense>` veya `loading.tsx` içinde olmalı; yönetim sayfaları `export const instant = false`. Değişiklikten önce `node_modules/next/dist/docs/` okunur.
 - Vitrin verisi `cacheTag("catalog")`; veriyi değiştiren her eylem `updateTag` çağırır. Veritabanına elle SQL yazılırsa önbellek yenilenmez.
 

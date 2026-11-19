@@ -10,24 +10,27 @@ import { getOrderForCustomer } from "@/lib/data/orders";
 import { formatTRY } from "@/lib/money";
 import { ORDER_STATUS_LABEL } from "@/lib/orders/status";
 import { whatsappLink } from "@/lib/settings";
+import { getStoreSettings } from "@/lib/data/store";
+import { AutoRefresh } from "./auto-refresh";
+import { TrackPurchase } from "./track-purchase";
 
 export const metadata: Metadata = { title: "Siparişiniz", robots: { index: false } };
 
 const PAYMENT_LABEL = { kart: "Kredi / banka kartı", havale: "Havale / EFT", kapida: "Kapıda ödeme" } as const;
 
-export default function OrderPage({ params }: PageProps<"/siparis/[no]">) {
+export default function OrderPage({ params, searchParams }: PageProps<"/siparis/[no]">) {
   return (
     <div className="container-shop pt-10 lg:pt-16">
       <Suspense fallback={<Skeleton className="h-64 w-full max-w-2xl" />}>
-        {params.then(({ no }) => (
-          <OrderView no={decodeURIComponent(no).toUpperCase()} />
+        {Promise.all([params, searchParams]).then(([{ no }, sp]) => (
+          <OrderView no={decodeURIComponent(no).toUpperCase()} paymentReturn={sp.odeme === "tamam"} />
         ))}
       </Suspense>
     </div>
   );
 }
 
-async function OrderView({ no }: { no: string }) {
+async function OrderView({ no, paymentReturn }: { no: string; paymentReturn: boolean }) {
   // Sipariş ayrıntısı yalnızca siparişi veren tarayıcıya (veya sipariş sorgulamada e-postayı doğrulayana) gösterilir.
   const allowed = unsign((await cookies()).get(ORDER_COOKIE)?.value, "order-view") === no;
   const data = allowed ? await getOrderForCustomer(no) : null;
@@ -46,9 +49,21 @@ async function OrderView({ no }: { no: string }) {
   }
 
   const { order, items, shipments } = data;
+  const store = await getStoreSettings();
   const isNew = order.status === "pending_payment";
+  const purchase =
+    order.paymentStatus === "paid" && !order.purchaseTrackedAt
+      ? {
+          orderNo: order.orderNo,
+          valueKurus: order.totalKurus,
+          shippingKurus: order.shippingKurus,
+          coupon: order.couponCode,
+          items: items.map((i) => ({ id: i.productId ?? i.slugSnapshot, name: i.nameSnapshot, priceKurus: i.priceKurusSnapshot, quantity: i.quantity })),
+        }
+      : null;
   return (
     <div className="grid gap-12 lg:grid-cols-12 lg:gap-6">
+      {purchase && <TrackPurchase purchase={purchase} />}
       <div className="lg:col-span-6">
         <p className="kicker mb-4">Sipariş no · {order.orderNo}</p>
         <h1 className="font-serif text-4xl font-light lg:text-[3.5rem] lg:leading-none">
@@ -82,12 +97,36 @@ async function OrderView({ no }: { no: string }) {
             </>
           )}
         </dl>
-        {isNew && (
-          <p className="mt-6 max-w-[46ch] border-l-2 border-ink bg-surface px-4 py-3 text-sm">
-            {order.paymentMethod === "havale"
-              ? `Havale/EFT bilgileri e-postanıza gönderilecek. Açıklamaya sipariş numaranızı (${order.orderNo}) yazın.`
-              : "Online ödeme adımı yakında açılacak (Faz 3). Siparişiniz şu an ödeme bekliyor olarak kayıtlı."}
-          </p>
+        {isNew && order.paymentMethod === "havale" && (
+          <div className="mt-6 max-w-md border-l-2 border-ink bg-surface px-4 py-3 text-sm">
+            <p className="mb-2 font-medium">Havale / EFT bilgileri</p>
+            <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1">
+              <dt className="text-ink-muted">Banka</dt>
+              <dd>{store.bank.bankName || "—"}</dd>
+              <dt className="text-ink-muted">Alıcı</dt>
+              <dd>{store.bank.accountHolder || "—"}</dd>
+              <dt className="text-ink-muted">IBAN</dt>
+              <dd className="font-mono">{store.bank.iban.replace(/(.{4})/g, "$1 ").trim() || "—"}</dd>
+              <dt className="text-ink-muted">Açıklama</dt>
+              <dd className="font-medium">{order.orderNo}</dd>
+            </dl>
+            <p className="mt-2 text-xs text-ink-muted">24 saat içinde ödenmeyen sipariş iptal edilir. Bilgiler e-postanıza da gönderildi.</p>
+          </div>
+        )}
+        {isNew && order.paymentMethod === "kart" && (
+          <div className="mt-6 max-w-md border-l-2 border-ink bg-surface px-4 py-3 text-sm">
+            {paymentReturn ? (
+              <>
+                <p>Ödeme onayı bankadan bekleniyor; birkaç saniye içinde güncellenir.</p>
+                <AutoRefresh seconds={4} />
+              </>
+            ) : (
+              <p>Ödemeniz henüz tamamlanmadı.</p>
+            )}
+            <ButtonLink href={`/odeme/kart/${order.orderNo}`} variant="text" className="mt-2">
+              Ödeme sayfasına dön
+            </ButtonLink>
+          </div>
         )}
         <div className="mt-8 flex flex-wrap gap-3">
           <ButtonLink href="/koleksiyon/yeni-gelenler">Alışverişe devam et</ButtonLink>

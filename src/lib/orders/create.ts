@@ -12,6 +12,7 @@ import { checkoutSchema, fieldErrors, type CheckoutInput } from "@/lib/checkout/
 import { normalizeTRMobile } from "@/lib/validators";
 import { priceCart, type CartInput, type CartIssue } from "@/lib/data/cart";
 import { formatOrderNo } from "./status";
+import { toMerchantOid } from "@/lib/integrations/paytr/hash";
 
 /** Onay metinlerinin sürümü; metin değişince artırılır (consent_logs.text_version). */
 export const CONSENT_TEXT_VERSION = "2026-11-taslak-1";
@@ -25,7 +26,7 @@ export type CreateOrderInput = {
 export type CreateOrderContext = { now?: Date; ip?: string | null; userAgent?: string | null };
 
 export type CreateOrderResult =
-  | { ok: true; orderNo: string; orderId: number; totalKurus: number; productIds: string[] }
+  | { ok: true; orderNo: string; orderId: number; totalKurus: number; productIds: string[]; paymentMethod: "kart" | "havale" | "kapida" }
   | { ok: false; code: "invalid"; fieldErrors: Record<string, string> }
   | { ok: false; code: "empty" }
   | { ok: false; code: "stock"; issues: CartIssue[] }
@@ -127,7 +128,9 @@ export async function createOrder(db: Db, input: CreateOrderInput, ctx: CreateOr
           shippingAddress,
           billingAddress,
           customerNote: form.orderNote || null,
-          expiresAt: new Date(now.getTime() + priced.settings.orderHoldMinutes * 60_000),
+          // Kart: ayarlardaki süre; havale: 24 saat (müşteri bankaya gidebilsin).
+          expiresAt: new Date(now.getTime() + (form.paymentMethod === "havale" ? 24 * 60 : priced.settings.orderHoldMinutes) * 60_000),
+          paytrMerchantOid: toMerchantOid(orderNo),
           createdAt: now,
         })
         .returning({ id: s.orders.id });
@@ -168,11 +171,11 @@ export async function createOrder(db: Db, input: CreateOrderInput, ctx: CreateOr
       if (input.marketingConsent) {
         await tx
           .insert(s.newsletterSubscribers)
-          .values({ email, source: "checkout", consentAt: now })
+          .values({ email, source: "checkout", consentAt: now, confirmedAt: now })
           .onConflictDoUpdate({ target: s.newsletterSubscribers.email, set: { unsubscribedAt: null } });
       }
 
-      return { ok: true as const, orderNo, orderId: order.id, totalKurus: t.totalKurus, productIds: priced.lines.map((l) => l.productId) };
+      return { ok: true as const, orderNo, orderId: order.id, totalKurus: t.totalKurus, productIds: priced.lines.map((l) => l.productId), paymentMethod: form.paymentMethod };
     });
   } catch (e) {
     if (e instanceof Abort) return e.result;

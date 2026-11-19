@@ -11,7 +11,9 @@ import { formatTRY } from "@/lib/money";
 import { ORDER_STATUS_LABEL } from "@/lib/orders/status";
 import { sign } from "@/lib/auth/sign";
 import { siteUrl } from "@/lib/site-url";
-import { NoteForm, ShipmentForm, StatusActions } from "../order-actions";
+import { InvoiceRetryButton, LabelButton, NoteForm, ShipmentForm, StatusActions } from "../order-actions";
+import { desc, eq } from "drizzle-orm";
+import * as s from "@/lib/db/schema";
 
 export const metadata: Metadata = { title: "Sipariş" };
 
@@ -24,6 +26,11 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/sipar
   const data = await getOrderForAdmin(getDb(), decodeURIComponent(no));
   if (!data) notFound();
   const { order, items, events, shipments } = data;
+  const emails = await getDb()
+    .select({ id: s.emailLogs.id, subject: s.emailLogs.subject, status: s.emailLogs.status, createdAt: s.emailLogs.createdAt })
+    .from(s.emailLogs)
+    .where(eq(s.emailLogs.orderId, order.id))
+    .orderBy(desc(s.emailLogs.createdAt));
   const ship = order.shippingAddress;
   const bill = order.billingAddress;
 
@@ -96,9 +103,17 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/sipar
           <Panel title="İşlemler">
             <div className="flex flex-col gap-6">
               {(order.status === "paid" || order.status === "preparing") && (
-                <div>
-                  <p className="mb-2 text-sm font-medium">Kargoya ver</p>
-                  <ShipmentForm orderId={order.id} />
+                <div className="flex flex-col gap-3">
+                  <p className="text-sm font-medium">Kargoya ver</p>
+                  <div>
+                    <LabelButton orderId={order.id} />
+                  </div>
+                  <details className="text-sm">
+                    <summary className="cursor-pointer text-ink-muted">Takip numarasını elle gir</summary>
+                    <div className="mt-3">
+                      <ShipmentForm orderId={order.id} />
+                    </div>
+                  </details>
                 </div>
               )}
               <div>
@@ -186,11 +201,62 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/sipar
                   <dt className="text-ink-muted">Kargo</dt>
                   <dd>
                     {sh.carrier} · {sh.trackingNo}
+                    {sh.labelUrl && (
+                      <>
+                        {" · "}
+                        <a href={sh.labelUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+                          Etiket
+                        </a>
+                      </>
+                    )}
                   </dd>
                 </span>
               ))}
             </dl>
           </Panel>
+          <Panel title="Fatura (e-arşiv)">
+            <div className="flex flex-col gap-2 text-sm">
+              <p>
+                {order.invoiceStatus === "issued" ? (
+                  <>
+                    {order.invoiceNo}
+                    {order.invoiceUrl && (
+                      <>
+                        {" · "}
+                        <a href={order.invoiceUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+                          Görüntüle
+                        </a>
+                      </>
+                    )}
+                  </>
+                ) : order.invoiceStatus === "failed" ? (
+                  <span className="text-error">Kesilemedi: {order.invoiceError}</span>
+                ) : order.invoiceStatus === "pending" ? (
+                  "Kesiliyor…"
+                ) : (
+                  <span className="text-ink-muted">Ödeme alınınca otomatik kesilir.</span>
+                )}
+              </p>
+              {(order.invoiceStatus === "failed" || (order.invoiceStatus === "none" && order.paymentStatus === "paid")) && <InvoiceRetryButton orderId={order.id} />}
+            </div>
+          </Panel>
+          {emails.length > 0 && (
+            <Panel title="Gönderilen e-postalar">
+              <ul className="flex flex-col gap-1.5 text-sm">
+                {emails.map((m) => (
+                  <li key={m.id}>
+                    <Link href={`/admin/eposta/${m.id}`} target="_blank" className="hover:underline">
+                      {m.subject}
+                    </Link>
+                    <span className="text-xs text-ink-muted">
+                      {" "}
+                      · {m.status === "mocked" ? "gönderilmedi (test)" : m.status === "sent" ? "gönderildi" : "hata"} · {formatDateTime(m.createdAt)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </Panel>
+          )}
           {order.customerNote && (
             <Panel title="Müşteri notu">
               <p className="text-sm">{order.customerNote}</p>

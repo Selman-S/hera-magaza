@@ -7,6 +7,7 @@
 import { asc, eq, sql } from "drizzle-orm";
 import { updateTag } from "next/cache";
 import { headers } from "next/headers";
+import { after } from "next/server";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getDb } from "@/lib/db";
@@ -28,7 +29,13 @@ import { getImageStorage, validateImageFile } from "@/lib/admin/storage";
 import { CATALOG_TAG } from "@/lib/data/catalog";
 import { REVIEWS_TAG, SETTINGS_TAG } from "@/lib/data/store";
 import { fieldErrors as zodFieldErrors } from "@/lib/checkout/schema";
-import { cancelExpiredOrders, transitionOrder } from "@/lib/orders/transitions";
+import { transitionOrder } from "@/lib/orders/transitions";
+import { issueInvoice, notifyBackInStock, runOrderEffects, type OrderEvent } from "@/lib/orders/effects";
+import { runJob } from "@/lib/cron/jobs";
+import { enqueueStockSync } from "@/lib/integrations/trendyol/sync";
+import { trendyolMockState } from "@/lib/integrations/trendyol/client";
+import { DEFAULT_PARCEL, getShippingProvider } from "@/lib/integrations/shipping";
+import { integrations } from "@/lib/integrations/config";
 import { ORDER_STATUS_LABEL, type OrderStatus } from "@/lib/orders/status";
 import { rateLimit, resetRateLimit } from "@/lib/rate-limit";
 import { storeSettingsSchema } from "@/lib/store-settings";
@@ -84,6 +91,12 @@ export async function saveProductAction(_prev: ActionState, fd: FormData): Promi
   if (!r) return { ok: false, message: "Ürün bulunamadı." };
   await audit(db, admin, "update", "product", id, diffOf(r.before, r.after));
   updateTag(CATALOG_TAG);
+  if (r.before.stock !== r.after.stock || r.before.status !== r.after.status) {
+    after(async () => {
+      await enqueueStockSync(db, [id]);
+      await notifyBackInStock(db, [id]);
+    });
+  }
   return {
     ok: true,
     message: r.slug !== r.oldSlug ? `Kaydedildi. Adres değişti; eski adres (/urun/${r.oldSlug}) yeni adrese yönlendiriliyor.` : "Kaydedildi.",
@@ -118,6 +131,13 @@ export async function quickUpdateAction(input: z.input<typeof quickSchema>): Pro
     const before = await quickUpdateProduct(db, p.data.id, patch, `admin:${admin.email}`);
     if (!before) return { ok: false, message: "Ürün bulunamadı." };
     await audit(db, admin, "quick_update", "product", p.data.id, diffOf(before as unknown as Record<string, unknown>, patch));
+    if (patch.stock !== undefined && patch.stock !== before.stock) {
+      const pid = p.data.id;
+      after(async () => {
+        await enqueueStockSync(db, [pid]);
+        await notifyBackInStock(db, [pid]);
+      });
+    }
   } catch (e) {
     if (String(e).includes("compare_at")) return { ok: false, message: "Fiyat, indirimsiz fiyattan düşük olmalı." };
     throw e;
@@ -208,6 +228,9 @@ export async function changeOrderStatusAction(orderId: number, to: OrderStatus, 
   }
   await audit(db, admin, "status", "order", r.orderNo, { to });
   updateTag(CATALOG_TAG);
+  const EVENTS: Partial<Record<OrderStatus, OrderEvent>> = { paid: "paid", delivered: "delivered", cancelled: "cancelled", refunded: "refunded", returned: "returned" };
+  const ev = EVENTS[to];
+  if (ev) after(() => runOrderEffects(db, orderId, ev));
   return { ok: true, message: `Durum: ${ORDER_STATUS_LABEL[to]}` };
 }
 
@@ -239,18 +262,86 @@ export async function addShipmentAction(orderId: number, input: z.input<typeof s
   if (!r.ok) return { ok: false, message: "Durum güncellenemedi." };
   await db.insert(s.shipments).values({ orderId, carrier: p.data.carrier, trackingNo: p.data.trackingNo, shippedAt: new Date() });
   await audit(db, admin, "shipment", "order", r.orderNo, p.data);
+  const ship = p.data;
+  after(() => runOrderEffects(db, orderId, "shipped", { carrier: ship.carrier, trackingNo: ship.trackingNo }));
   return { ok: true, message: "Kargo bilgisi eklendi, sipariş kargoda." };
+}
+
+/** Kargo aracısı (Geliver; hesap yokken mock) ile gönderi + etiket oluşturur ve siparişi kargoya verir. */
+export async function createLabelAction(orderId: number): Promise<ActionState & { labelUrl?: string }> {
+  const admin = await requireAdmin();
+  const db = getDb();
+  const [order] = await db.select().from(s.orders).where(eq(s.orders.id, orderId));
+  if (!order) return { ok: false, message: "Sipariş bulunamadı." };
+  if (!["paid", "preparing"].includes(order.status)) return { ok: false, message: "Etiket yalnızca ödenmiş/hazırlanan siparişe oluşturulur." };
+  let shipment;
+  try {
+    shipment = await getShippingProvider().createShipment({ orderNo: order.orderNo, recipient: order.shippingAddress, parcel: DEFAULT_PARCEL });
+  } catch (e) {
+    return { ok: false, message: `Kargo oluşturulamadı: ${e instanceof Error ? e.message : String(e)}` };
+  }
+  if (order.status === "paid") await transitionOrder(db, orderId, "preparing", `admin:${admin.email}`);
+  const r = await transitionOrder(db, orderId, "shipped", `admin:${admin.email}`, `${shipment.carrier} ${shipment.trackingNo}`);
+  if (!r.ok) return { ok: false, message: "Durum güncellenemedi." };
+  await db.insert(s.shipments).values({
+    orderId,
+    carrier: shipment.carrier,
+    trackingNo: shipment.trackingNo,
+    labelUrl: shipment.labelUrl,
+    providerRef: shipment.providerRef,
+    shippedAt: new Date(),
+  });
+  await audit(db, admin, "label", "order", order.orderNo, { trackingNo: shipment.trackingNo });
+  const sh = shipment;
+  after(() => runOrderEffects(db, orderId, "shipped", { carrier: sh.carrier, trackingNo: sh.trackingNo, trackingUrl: sh.trackingUrl }));
+  return { ok: true, message: `Etiket hazır: ${shipment.trackingNo}`, labelUrl: shipment.labelUrl };
+}
+
+export async function retryInvoiceAction(orderId: number): Promise<ActionState> {
+  const admin = await requireAdmin();
+  const db = getDb();
+  await issueInvoice(db, orderId);
+  const [o] = await db
+    .select({ invoiceStatus: s.orders.invoiceStatus, invoiceError: s.orders.invoiceError, orderNo: s.orders.orderNo })
+    .from(s.orders)
+    .where(eq(s.orders.id, orderId));
+  await audit(db, admin, "invoice_retry", "order", o?.orderNo ?? orderId);
+  return o?.invoiceStatus === "issued" ? { ok: true, message: "Fatura kesildi." } : { ok: false, message: `Fatura kesilemedi: ${o?.invoiceError ?? "bilinmiyor"}` };
 }
 
 export async function runExpiryCleanupAction(): Promise<ActionState> {
   const admin = await requireAdmin();
   const db = getDb();
-  const cancelled = await cancelExpiredOrders(db);
+  const r = await runJob(db, "expire-orders");
+  const cancelled = (r.summary.cancelled as string[]) ?? [];
   if (cancelled.length) {
     await audit(db, admin, "expire_cleanup", "order", null, { cancelled });
     updateTag(CATALOG_TAG);
   }
   return { ok: true, message: cancelled.length ? `${cancelled.length} sipariş iptal edildi, stok iade edildi.` : "Süresi dolan sipariş yok." };
+}
+
+// ── Trendyol ────────────────────────────────────────────────────────────────
+export async function runTrendyolSyncAction(): Promise<ActionState> {
+  const admin = await requireAdmin();
+  const db = getDb();
+  const r = await runJob(db, "trendyol");
+  await audit(db, admin, "trendyol_sync", "trendyol", null, r.summary);
+  if (r.catalogChanged) updateTag(CATALOG_TAG);
+  const sm = r.summary as { processed: number; sent: number; failed: number; mode: string };
+  const failedText = sm.failed ? `, ${sm.failed} başarısız` : "";
+  return { ok: sm.failed === 0, message: `Senkron (${sm.mode}): ${sm.processed} paket işlendi, ${sm.sent} stok gönderildi${failedText}.` };
+}
+
+/** Yalnızca mock modda: Trendyol'da satış olmuş gibi paket ekler (senkronu denemek için). */
+export async function simulateTrendyolSaleAction(productId: string): Promise<ActionState> {
+  await requireAdmin();
+  if (integrations.trendyol().mode !== "mock") return { ok: false, message: "Gerçek Trendyol bağlıyken deneme yapılamaz." };
+  const [p] = await getDb().select({ barcode: s.products.barcode, name: s.products.name }).from(s.products).where(eq(s.products.id, productId));
+  if (!p?.barcode) return { ok: false, message: "Ürünün barkodu yok; önce barkod girin." };
+  const n = Date.now();
+  trendyolMockState.packages.push({ shipmentPackageId: `MOCK${n}`, orderNumber: `TY${n}`, status: "Created", lastModifiedDate: n, lines: [{ barcode: p.barcode, quantity: 1, productName: p.name }] });
+  return { ok: true, message: `Deneme paketi eklendi (${p.name}). Şimdi senkronu çalıştırın.` };
 }
 
 // ── Kuponlar ────────────────────────────────────────────────────────────────
@@ -318,6 +409,8 @@ export async function saveSettingsAction(_prev: ActionState, fd: FormData): Prom
     announcement: String(fd.get("announcement") ?? ""),
     paymentMethods: { kart: fd.get("pm_kart") === "on", havale: fd.get("pm_havale") === "on", kapida: fd.get("pm_kapida") === "on" },
     orderHoldMinutes: Number(fd.get("orderHoldMinutes")),
+    bank: { bankName: String(fd.get("bankName") ?? ""), accountHolder: String(fd.get("accountHolder") ?? ""), iban: String(fd.get("iban") ?? "") },
+    adminNotifyEmail: String(fd.get("adminNotifyEmail") ?? "").trim(),
   };
   const p = storeSettingsSchema.safeParse(raw);
   if (!p.success) {

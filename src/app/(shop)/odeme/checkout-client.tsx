@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition, type ReactNode } from "react";
 import { placeOrder, validateCart } from "@/app/actions/shop";
 import { toast } from "@/components/ui/toast";
+import { analytics } from "@/lib/analytics";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { Checkbox, Field, Input, RadioCard, Select, Textarea } from "@/components/ui/form";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -209,6 +210,12 @@ export function CheckoutClient({ preInfoHtml, distanceSaleHtml }: { preInfoHtml:
   });
   const update = <K extends keyof FormState>(k: K, v: FormState[K]) => setForm((f) => ({ ...f, [k]: v }));
   const totals = useCartTotals();
+  const checkoutTracked = useRef(false);
+  useEffect(() => {
+    if (!hydrated || checkoutTracked.current || lines.length === 0) return;
+    checkoutTracked.current = true;
+    analytics.beginCheckout(lines.map((l) => ({ id: l.productId, name: l.name, priceKurus: l.priceKurus, quantity: l.quantity })), totals.totalKurus);
+  }, [hydrated, lines, totals.totalKurus]);
 
   if (!hydrated) {
     return (
@@ -256,6 +263,9 @@ export function CheckoutClient({ preInfoHtml, distanceSaleHtml }: { preInfoHtml:
     setErrors({});
     setFormError(null);
     setSubmitting(true);
+    const trackItems = lines.map((l) => ({ id: l.productId, name: l.name, priceKurus: l.priceKurus, quantity: l.quantity }));
+    analytics.addShippingInfo(trackItems, totals.totalKurus);
+    analytics.addPaymentInfo(trackItems, totals.totalKurus, form.paymentMethod);
     startTransition(async () => {
       try {
         const { lines: current, coupon: currentCoupon, syncFromServer } = useCart.getState();
@@ -266,7 +276,8 @@ export function CheckoutClient({ preInfoHtml, distanceSaleHtml }: { preInfoHtml:
         });
         if (result.ok) {
           clear();
-          router.push(`/siparis/${result.orderNo}`);
+          // Kart: PayTR ödeme sayfası; havale: sipariş sayfası (IBAN bilgisiyle).
+          router.push(result.paymentMethod === "kart" ? `/odeme/kart/${result.orderNo}` : `/siparis/${result.orderNo}`);
           return;
         }
         setSubmitting(false);
@@ -482,7 +493,7 @@ export function CheckoutClient({ preInfoHtml, distanceSaleHtml }: { preInfoHtml:
             {submitting || isPending ? "Sipariş oluşturuluyor…" : syncing ? "Sepet doğrulanıyor…" : `Siparişi tamamla · ${formatTRY(totals.totalKurus)}`}
           </Button>
           <p className="text-center text-xs text-ink-muted">
-            Ödeme adımı Faz 3’te bağlanacak: siparişiniz “ödeme bekleniyor” olarak kaydedilir.
+            Kartla ödemede bir sonraki adımda PayTR güvenli ödeme sayfası açılır.
           </p>
         </div>
       </div>

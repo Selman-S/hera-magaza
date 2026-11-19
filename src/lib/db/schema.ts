@@ -58,6 +58,10 @@ export const addressType = pgEnum("address_type", ["shipping", "billing"]);
 export const consentType = pgEnum("consent_type", ["kvkk", "etk", "cookie", "distance_sales", "pre_info"]);
 export const adminRole = pgEnum("admin_role", ["owner", "staff"]);
 export const shipmentStatus = pgEnum("shipment_status", ["pending", "shipped", "delivered", "returned"]);
+export const invoiceStatus = pgEnum("invoice_status", ["none", "pending", "issued", "failed"]);
+export const emailStatus = pgEnum("email_status", ["sent", "mocked", "failed"]);
+export const syncStatus = pgEnum("sync_status", ["pending", "sent", "failed"]);
+export const logLevel = pgEnum("log_level", ["info", "warn", "error"]);
 
 export const orderNoSeq = pgSequence("order_no_seq", { startWith: 1, increment: 1 });
 
@@ -230,6 +234,14 @@ export const orders = pgTable(
     paytrMerchantOid: text("paytr_merchant_oid").unique(),
     /** Ödenmezse bu andan sonra iptal edilip stok iade edilir. */
     expiresAt: timestamp("expires_at", { withTimezone: true }),
+    invoiceStatus: invoiceStatus("invoice_status").notNull().default("none"),
+    invoiceNo: text("invoice_no"),
+    invoiceUrl: text("invoice_url"),
+    invoiceError: text("invoice_error"),
+    /** GA4/Meta "purchase" olayı bir kez gönderilsin. */
+    purchaseTrackedAt: timestamp("purchase_tracked_at", { withTimezone: true }),
+    reviewInviteSentAt: timestamp("review_invite_sent_at", { withTimezone: true }),
+    deliveredAt: timestamp("delivered_at", { withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },
@@ -293,6 +305,8 @@ export const shipments = pgTable("shipments", {
   carrier: text("carrier").notNull(),
   trackingNo: text("tracking_no").notNull(),
   labelUrl: text("label_url"),
+  /** Kargo aracısındaki gönderi kimliği (durum sorgulama için). */
+  providerRef: text("provider_ref"),
   status: shipmentStatus("status").notNull().default("shipped"),
   shippedAt: timestamp("shipped_at", { withTimezone: true }),
   deliveredAt: timestamp("delivered_at", { withTimezone: true }),
@@ -379,6 +393,8 @@ export const newsletterSubscribers = pgTable("newsletter_subscribers", {
   email: text("email").notNull().unique(),
   source: text("source").notNull(),
   consentAt: timestamp("consent_at", { withTimezone: true }).notNull().defaultNow(),
+  /** Çift onay: e-postadaki bağlantıya tıklanınca dolar. */
+  confirmedAt: timestamp("confirmed_at", { withTimezone: true }),
   unsubscribedAt: timestamp("unsubscribed_at", { withTimezone: true }),
 });
 
@@ -437,6 +453,68 @@ export const settings = pgTable("settings", {
   value: jsonb("value").notNull(),
   updatedAt: updatedAt(),
 });
+
+// ── Faz 3: entegrasyon kayıtları ───────────────────────────────────────────
+export const emailLogs = pgTable(
+  "email_logs",
+  {
+    id: serial("id").primaryKey(),
+    to: text("to").notNull(),
+    subject: text("subject").notNull(),
+    template: text("template").notNull(),
+    html: text("html").notNull(),
+    status: emailStatus("status").notNull(),
+    providerId: text("provider_id"),
+    error: text("error"),
+    orderId: integer("order_id").references(() => orders.id, { onDelete: "set null" }),
+    createdAt: createdAt(),
+  },
+  (t) => [index("email_logs_created_idx").on(t.createdAt)],
+);
+
+/** Site → Trendyol stok güncelleme kuyruğu (ürün başına tek bekleyen kayıt, tekrar denemeli). */
+export const trendyolStockQueue = pgTable(
+  "trendyol_stock_queue",
+  {
+    id: serial("id").primaryKey(),
+    productId: text("product_id")
+      .notNull()
+      .references(() => products.id, { onDelete: "cascade" }),
+    status: syncStatus("status").notNull().default("pending"),
+    attempts: integer("attempts").notNull().default(0),
+    lastError: text("last_error"),
+    batchRequestId: text("batch_request_id"),
+    sentQuantity: integer("sent_quantity"),
+    nextAttemptAt: timestamp("next_attempt_at", { withTimezone: true }).notNull().defaultNow(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [index("trendyol_queue_status_idx").on(t.status, t.nextAttemptAt)],
+);
+
+/** İşlenmiş Trendyol paketleri (aynı paket iki kez stok düşürmesin). */
+export const trendyolPackages = pgTable("trendyol_packages", {
+  shipmentPackageId: text("shipment_package_id").primaryKey(),
+  orderNumber: text("order_number").notNull(),
+  status: text("status").notNull(),
+  lines: jsonb("lines").$type<Array<{ barcode: string; quantity: number; productId: string | null }>>().notNull(),
+  stockApplied: boolean("stock_applied").notNull().default(false),
+  processedAt: timestamp("processed_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: updatedAt(),
+});
+
+export const syncLogs = pgTable(
+  "sync_logs",
+  {
+    id: serial("id").primaryKey(),
+    source: text("source").notNull(), // trendyol, paytr, kargo, fatura, cron
+    level: logLevel("level").notNull(),
+    message: text("message").notNull(),
+    details: jsonb("details"),
+    createdAt: createdAt(),
+  },
+  (t) => [index("sync_logs_created_idx").on(t.createdAt)],
+);
 
 // ── İlişkiler ───────────────────────────────────────────────────────────────
 export const productsRelations = relations(products, ({ many }) => ({

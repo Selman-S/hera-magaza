@@ -56,7 +56,9 @@ test("arama: 'vangogh' ve 'Van Gogh' aynı sonucu verir", async ({ page }) => {
   const count = async (q: string) => {
     await page.getByRole("button", { name: "Ara" }).click();
     await page.getByRole("searchbox").fill(q);
-    const n = await page.getByRole("dialog", { name: "Ara" }).locator("li a").count();
+    const results = page.getByRole("dialog", { name: "Ara" }).locator("li a");
+    await expect(results.first()).toBeVisible();
+    const n = await results.count();
     await page.keyboard.press("Escape");
     return n;
   };
@@ -96,6 +98,26 @@ test("ödeme: boş form hata verir; dolu form 'ödeme bekleniyor' siparişi aça
   // Tek stoklu eşarp artık tükendi.
   await page.goto(ESARP_SON1);
   await expect(page.getByRole("button", { name: "Tükendi" })).toBeDisabled();
+});
+
+test("kartla ödeme: test ödemesi siparişi 'Ödendi' yapar, kupon Enter ile uygulanır", async ({ page }) => {
+  await page.goto(SAL);
+  await page.getByRole("button", { name: "Sepete ekle" }).first().click();
+  await page.goto("/odeme");
+  await fillCheckout(page, `kart-${test.info().project.name}@example.com`);
+  // Kupon alanı ana formun içinde: Enter siparişi göndermemeli, kuponu uygulamalı.
+  const summary = page.getByText(/Sipariş özetini göster/);
+  if (await summary.isVisible()) await summary.click(); // mobil: özet katlanmış
+  const coupon = page.getByRole("textbox", { name: "Kupon kodu" }).filter({ visible: true });
+  await coupon.fill("hosgeldin10");
+  await coupon.press("Enter");
+  await expect(page.getByText(/Kupon: HOSGELDIN10/).filter({ visible: true })).toBeVisible();
+  await expect(page).toHaveURL(/\/odeme$/);
+  await page.getByRole("button", { name: /Siparişi tamamla/ }).click();
+  await expect(page).toHaveURL(/\/odeme\/kart\/HR-\d{4}-\d{5}$/);
+  await page.getByRole("button", { name: "Başarılı ödeme" }).click();
+  await expect(page).toHaveURL(/\/siparis\/HR-\d{4}-\d{5}\?odeme=tamam$/);
+  await expect(page.getByText("Ödendi")).toBeVisible();
 });
 
 test("yönetim: giriş, bekleyen siparişi iptal etme (stok iadesi)", async ({ page }) => {
