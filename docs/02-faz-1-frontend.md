@@ -95,8 +95,8 @@
 - **Kabul:** Her sayfa için yükleme iskeleti var
 
 ### F1-13 Önizleme yayını
-- [ ] Vercel preview'a yayınla, `noindex` ile
-- [ ] Arkadaşından geri bildirim topla → `docs/geri-bildirim.md`
+- [x] Vercel preview'a yayınla, `noindex` ile → https://hera-magaza.vercel.app (19.11.2026; Vercel projesi `hera-magaza`, ilk yayın olduğu için production hedefine düştü, tüm sayfalar noindex)
+- [ ] Arkadaşından geri bildirim topla → `docs/geri-bildirim.md` (şablon hazır)
 - **Kabul:** Link mobilde sorunsuz açılıyor
 
 ## Faz 1 çıktısı

@@ -1,0 +1,7 @@
+node_modules
+.next
+public/ornek/*.jpg
+design-explorations/ekran
+test-results
+playwright-report
+.claude

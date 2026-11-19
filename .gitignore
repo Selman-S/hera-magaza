@@ -48,3 +48,5 @@ next-env.d.ts
 
 # Trendyol ham indirmeleri (kırpılmış kopyalar public/ornek/kirpik ve public/urunler altında)
 /public/ornek/*.jpg
+
+.vercel

@@ -9,6 +9,7 @@ import { getAllProductSlugs, getProductBySlug, getRelatedProducts } from "@/lib/
 import { PRODUCT_TYPE_LABEL, type ProductDetail } from "@/lib/data/schema";
 import { formatTRY } from "@/lib/money";
 import { settings } from "@/lib/settings";
+import { siteUrl } from "@/lib/site-url";
 
 export async function generateStaticParams() {
   const slugs = await getAllProductSlugs();
@@ -33,7 +34,7 @@ const ARTIST_LIFE: Record<string, string> = {
 };
 
 function productJsonLd(p: ProductDetail) {
-  const site = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const site = siteUrl();
   return {
     "@context": "https://schema.org",
     "@type": "Product",
