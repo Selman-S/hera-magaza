@@ -29,14 +29,19 @@ Her görev dokümanda bir ID taşır (ör. `F1-03`). Görev bitince ilgili dokü
 - Stok düşümü ve sipariş oluşturma tek veritabanı transaction'ı içinde yapılır (tek parça stok var; çift satış olmamalı).
 
 ## Komutlar
-- `pnpm dev` — geliştirme (http://localhost:3000)
-- `pnpm build && pnpm start` — üretim derlemesi
-- `pnpm lint` / `pnpm typecheck` / `pnpm test` (Vitest) / `pnpm test:e2e` (Playwright, yerel Chrome kullanır; port 3100)
-- Next.js 16.4: Cache Components açık. `params`/`searchParams` okuyan kısımlar `<Suspense>` veya `loading.tsx` içinde olmalı; değişmeden önce `node_modules/next/dist/docs/` okunur.
+- `pnpm dev` — geliştirme (http://localhost:3000). `.env.local` gerekli (bkz. `.env.example`).
+- `pnpm build && pnpm start` — üretim derlemesi (derleme sırasında veritabanına bağlanır)
+- `pnpm lint` / `pnpm typecheck` / `pnpm test` (Vitest birim)
+- `pnpm test:integration` — gerçek PostgreSQL'de (`TEST_DATABASE_URL`, tabloları siler) sipariş/stok testleri
+- `pnpm test:e2e` — Playwright; test veritabanını sıfırlar, derler, 3100 portunda çalışır
+- `pnpm db:generate` (şema değişince migration) · `pnpm db:migrate` · `pnpm db:seed` · `pnpm db:reset` (yalnızca yerel)
+- `pnpm admin:create` — yönetici hesabı oluştur / şifre yenile
+- Next.js 16.4: Cache Components açık. `params`/`searchParams`/çerez okuyan kısımlar `<Suspense>` veya `loading.tsx` içinde olmalı; yönetim sayfaları `export const instant = false`. Değişiklikten önce `node_modules/next/dist/docs/` okunur.
+- Vitrin verisi `cacheTag("catalog")`; veriyi değiştiren her eylem `updateTag` çağırır. Veritabanına elle SQL yazılırsa önbellek yenilenmez.
 
 ## Her görevden sonra
 1. `pnpm typecheck && pnpm lint && pnpm test` geçmeli.
-2. Mobil (375px) ve masaüstü (1280px) görünümü kontrol et.
+2. `pnpm test:integration` (veri/sipariş değiştiyse) ve mobil (375px) + masaüstü (1280px) görünümü kontrol et.
 3. Dokümandaki kutucuğu işaretle, kısa bir commit mesajı yaz (Türkçe, emir kipinde: "Ürün detay sayfasını ekle").
 
 ## Yapma

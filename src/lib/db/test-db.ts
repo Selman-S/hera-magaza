@@ -7,7 +7,8 @@ import { seedDatabase } from "./seed";
 export function testDatabaseUrl(): string {
   const url = process.env.TEST_DATABASE_URL;
   if (!url) throw new Error("TEST_DATABASE_URL tanımlı değil (.env.local).");
-  if (url === process.env.DATABASE_URL) throw new Error("TEST_DATABASE_URL, DATABASE_URL ile aynı olamaz (testler tabloları siler).");
+  // E2E sunucusu bilerek DATABASE_URL = TEST_DATABASE_URL ile çalışır; diğer durumlarda geliştirme verisini koru.
+  if (url === process.env.DATABASE_URL && process.env.E2E_DATABASE !== "1") throw new Error("TEST_DATABASE_URL, DATABASE_URL ile aynı olamaz (testler tabloları siler).");
   return url;
 }
 

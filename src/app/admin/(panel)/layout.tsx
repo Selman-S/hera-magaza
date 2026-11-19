@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 
 export default function AdminLayout({ children }: LayoutProps<"/admin">) {
   return (
-    <div className="flex min-h-screen flex-col lg:flex-row">
-      <aside className="border-b border-line bg-surface lg:sticky lg:top-0 lg:h-screen lg:w-60 lg:shrink-0 lg:border-r lg:border-b-0">
+    <div className="flex min-h-screen w-full min-w-0 flex-col lg:flex-row">
+      <aside className="border-b border-line bg-surface lg:sticky lg:top-0 lg:flex lg:h-screen lg:w-60 lg:shrink-0 lg:flex-col lg:border-r lg:border-b-0">
         <div className="flex items-center justify-between gap-4 px-4 py-4 lg:flex-col lg:items-start lg:px-5 lg:py-6">
           <Link href="/admin" className="flex items-baseline gap-2">
             <span className="font-serif text-2xl">Hera</span>
@@ -35,7 +35,7 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
         <nav aria-label="Yönetim menüsü" className="px-3 pb-3 lg:px-3">
           <AdminNav />
         </nav>
-        <div className="mt-auto hidden flex-col gap-2 border-t border-line px-5 py-5 text-sm lg:absolute lg:bottom-0 lg:flex lg:w-60">
+        <div className="mt-auto hidden flex-col gap-2 border-t border-line px-5 py-5 text-sm lg:flex">
           <Link href="/" target="_blank" className="text-ink-muted hover:text-ink">
             Siteyi görüntüle ↗
           </Link>
@@ -46,7 +46,7 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
           </form>
         </div>
       </aside>
-      <main id="icerik" className="min-w-0 flex-1 px-4 py-6 lg:px-10 lg:py-10">
+      <main id="icerik" className="w-full min-w-0 flex-1 px-4 py-6 lg:px-10 lg:py-10">
         {children}
       </main>
       <Toaster />

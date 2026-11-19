@@ -79,7 +79,7 @@ export function CouponToggle({ id, active }: { id: number; active: boolean }) {
   const router = useRouter();
   const [pending, start] = useTransition();
   return (
-    <label className="inline-flex cursor-pointer items-center gap-2 text-sm">
+    <label className="relative inline-flex cursor-pointer items-center gap-2 text-sm">
       <input
         type="checkbox"
         className="size-4 accent-ink"

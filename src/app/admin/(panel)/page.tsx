@@ -99,7 +99,7 @@ export default async function DashboardPage() {
                   <Link href={`/admin/urunler/${p.id}`} className="hover:underline">
                     {p.name}
                   </Link>
-                  <span className={p.stock === 0 ? "font-medium text-dot" : "text-ink-muted"}>{p.stock === 0 ? "Tükendi" : "Son 1"}</span>
+                  <span className={`shrink-0 ${p.stock === 0 ? "font-medium text-dot" : "text-ink-muted"}`}>{p.stock === 0 ? "Tükendi" : "Son 1"}</span>
                 </li>
               ))}
             </ul>

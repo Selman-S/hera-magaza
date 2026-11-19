@@ -7,13 +7,13 @@
 ## Görevler
 
 ### F2-00 Karar: kendi admin paneli mi, Payload CMS mi?
-- [ ] İki seçeneği küçük bir denemeyle karşılaştır (yarım gün), kararı `docs/kararlar.md`'ye yaz
+- [x] İki seçeneği küçük bir denemeyle karşılaştır (yarım gün), kararı `docs/kararlar.md`'ye yaz → K-01: kendi panelimiz
 - Bu doküman **kendi admin paneli** varsayımıyla yazıldı.
 
 ### F2-01 Veritabanı kurulumu
-- [ ] Neon (veya Supabase) Postgres, `DATABASE_URL` env
-- [ ] Drizzle kurulumu, `drizzle-kit` migration komutları
-- [ ] Yerel geliştirme için Docker Postgres (opsiyonel)
+- [x] Neon (veya Supabase) Postgres, `DATABASE_URL` env → geliştirmede yerel PostgreSQL 15 (K-02); yayın DB'si yayın kararıyla birlikte
+- [x] Drizzle kurulumu, `drizzle-kit` migration komutları
+- [x] Yerel geliştirme için Docker Postgres (opsiyonel) → gerek kalmadı (yerel kurulum)
 
 ### F2-02 Şema
 Tablolar (özet; alanlar Drizzle şemasında netleşecek):
@@ -42,61 +42,61 @@ Tablolar (özet; alanlar Drizzle şemasında netleşecek):
 
 Sipariş durumları: `pending_payment → paid → preparing → shipped → delivered`, yan dallar: `cancelled`, `refunded`, `return_requested`, `returned`.
 
-- [ ] Şemayı yaz, migration oluştur
-- [ ] Seed: `content/products.json` → DB
+- [x] Şemayı yaz, migration oluştur
+- [x] Seed: `content/products.json` → DB
 - **Kabul:** `pnpm db:migrate && pnpm db:seed` sıfırdan çalışıyor
 
 ### F2-03 Veri katmanını DB'ye bağla
-- [ ] `lib/data/catalog.ts` fonksiyonlarını Drizzle sorgularıyla değiştir (imzalar aynı)
-- [ ] Ürün/koleksiyon sayfalarında ISR + `revalidateTag` (admin'de ürün güncellenince sayfa yenilenir)
+- [x] `lib/data/catalog.ts` fonksiyonlarını Drizzle sorgularıyla değiştir (imzalar aynı)
+- [x] Ürün/koleksiyon sayfalarında ISR + `revalidateTag` (admin'de ürün güncellenince sayfa yenilenir) → `use cache` + `cacheTag("catalog")`, değişiklikte `updateTag`
 - **Kabul:** Faz 1 sayfaları hiç değişmeden gerçek veriyle çalışıyor
 
 ### F2-04 Sepet doğrulama ve fiyat hesaplama sunucuda
-- [ ] `lib/data/cart.ts`: istemciden gelen sepeti (productId + adet) sunucuda yeniden fiyatla; stok, aktiflik, kupon, kargo eşiği kontrolü
-- [ ] İstemcideki fiyata asla güvenme
+- [x] `lib/data/cart.ts`: istemciden gelen sepeti (productId + adet) sunucuda yeniden fiyatla; stok, aktiflik, kupon, kargo eşiği kontrolü
+- [x] İstemcideki fiyata asla güvenme
 - **Kabul:** İstemcide fiyat değiştirilse bile sunucu doğru toplamı döndürüyor (test)
 
 ### F2-05 Sipariş oluşturma ve stok rezervasyonu
-- [ ] Server Action: `createOrder(checkoutInput)`
-- [ ] Tek transaction: stok kontrolü (`SELECT ... FOR UPDATE`) → stok düş → `inventory_movements` kaydı → sipariş + kalemler `pending_payment`
-- [ ] Ödenmeyen sipariş 30 dk sonra iptal + stok iade (cron, Faz 3'te bağlanacak; şimdilik fonksiyon + test)
-- [ ] Onay kayıtları (`consent_logs`): mesafeli satış, KVKK, ETK (pazarlama izni ayrı kutucuk)
+- [x] Server Action: `createOrder(checkoutInput)`
+- [x] Tek transaction: stok kontrolü (`SELECT ... FOR UPDATE`) → stok düş → `inventory_movements` kaydı → sipariş + kalemler `pending_payment`
+- [x] Ödenmeyen sipariş 30 dk sonra iptal + stok iade (cron, Faz 3'te bağlanacak; şimdilik fonksiyon + test) → `cancelExpiredOrders`, süre ayarlardan
+- [x] Onay kayıtları (`consent_logs`): mesafeli satış, KVKK, ETK (pazarlama izni ayrı kutucuk)
 - **Kabul:** Aynı tek stoklu ürüne eşzamanlı iki sipariş → biri başarısız (entegrasyon testi)
 
 ### F2-06 Admin kimlik doğrulama
-- [ ] Auth.js, `admin_users`, `/admin` middleware koruması, giriş rate limit
-- [ ] İlk admin kullanıcı CLI ile oluşturulur (`pnpm admin:create`)
+- [x] Auth.js, `admin_users`, `/admin` middleware koruması, giriş rate limit → Auth.js yerine yerleşik oturum (K-03), `src/proxy.ts`
+- [x] İlk admin kullanıcı CLI ile oluşturulur (`pnpm admin:create`)
 
 ### F2-07 Admin: ürünler
-- [ ] Liste (arama, durum filtresi, stok sütunu), oluştur/düzenle/arşivle
-- [ ] Görsel yükleme (R2/Cloudinary), sürükle-bırak sıralama, alt metin
-- [ ] Slug otomatik, değiştirilirse eski slug'dan yönlendirme
-- [ ] Hızlı stok/fiyat düzenleme (listeden satır içi)
-- [ ] Sitede fiyat & Trendyol fiyatı yan yana (fark yüzdesi gösterilir)
+- [x] Liste (arama, durum filtresi, stok sütunu), oluştur/düzenle/arşivle
+- [x] Görsel yükleme (R2/Cloudinary), sürükle-bırak sıralama, alt metin → yerel disk adaptörü; R2/Cloudinary kararı bekliyor (K-04, K-05)
+- [x] Slug otomatik, değiştirilirse eski slug'dan yönlendirme
+- [x] Hızlı stok/fiyat düzenleme (listeden satır içi)
+- [x] Sitede fiyat & Trendyol fiyatı yan yana (fark yüzdesi gösterilir)
 
 ### F2-08 Admin: siparişler
-- [ ] Liste (durum, tarih, arama), detay, durum değiştirme (geçerli geçişler dışında engelle)
-- [ ] Not ekleme, iptal (stok iadesi otomatik), kargo takip no girişi (Faz 3'te otomatik)
-- [ ] Yazdırılabilir sipariş fişi (paketleme için)
+- [x] Liste (durum, tarih, arama), detay, durum değiştirme (geçerli geçişler dışında engelle)
+- [x] Not ekleme, iptal (stok iadesi otomatik), kargo takip no girişi (Faz 3'te otomatik)
+- [x] Yazdırılabilir sipariş fişi (paketleme için)
 
 ### F2-09 Admin: kupon, yorum, ayarlar
-- [ ] Kupon CRUD
-- [ ] Yorum moderasyonu (onayla/reddet)
-- [ ] Ayarlar: kargo eşiği, kargo ücreti, hediye kutusu, duyuru bandı
+- [x] Kupon CRUD
+- [x] Yorum moderasyonu (onayla/reddet)
+- [x] Ayarlar: kargo eşiği, kargo ücreti, hediye kutusu, duyuru bandı
 
 ### F2-10 Admin: gösterge paneli
-- [ ] Bugün/bu hafta/bu ay: sipariş sayısı, ciro, ortalama sepet, düşük stoklu ürünler, bekleyen siparişler
+- [x] Bugün/bu hafta/bu ay: sipariş sayısı, ciro, ortalama sepet, düşük stoklu ürünler, bekleyen siparişler
 
 ### F2-11 Müşteri tarafı tamamlamaları
-- [ ] Sipariş sorgulama sayfası (sipariş no + e-posta)
-- [ ] "Gelince haber ver" kaydı
-- [ ] E-bülten kaydı (çift onay e-postası Faz 3'te)
-- [ ] Yorum gönderme (sadece sipariş sahibi, teslimattan sonra — bağlantı e-postayla gelecek)
+- [x] Sipariş sorgulama sayfası (sipariş no + e-posta)
+- [x] "Gelince haber ver" kaydı
+- [x] E-bülten kaydı (çift onay e-postası Faz 3'te)
+- [x] Yorum gönderme (sadece sipariş sahibi, teslimattan sonra — bağlantı e-postayla gelecek) → `/yorum?anahtar=…` (imzalı); bağlantı şimdilik admin sipariş sayfasında
 
 ### F2-12 Testler
-- [ ] Birim: fiyat hesaplama, kupon, kargo eşiği, slug
-- [ ] Entegrasyon: sipariş + stok transaction'ı, eşzamanlılık
-- [ ] E2E (Playwright): ürün → sepet → checkout → `pending_payment` sipariş
+- [x] Birim: fiyat hesaplama, kupon, kargo eşiği, slug
+- [x] Entegrasyon: sipariş + stok transaction'ı, eşzamanlılık
+- [x] E2E (Playwright): ürün → sepet → checkout → `pending_payment` sipariş
 
 ## Faz 2 çıktısı
 Gerçek ürün ve sipariş verisiyle çalışan site + arkadaşının kullanabileceği yönetim paneli. Ödeme henüz yok (siparişler "ödeme bekleniyor" durumunda kalır).

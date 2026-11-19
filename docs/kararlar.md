@@ -27,3 +27,22 @@ Auth.js v5 hâlâ beta. Tek yönetici, e-posta + şifre için ek bağımlılık 
 
 ## K-04 · Görsel yükleme: depolama adaptörü (19.11.2026)
 Faz 2'de yerel adaptör `public/uploads/`'a yazar (yalnızca geliştirme). R2/Cloudinary hesabı açılınca aynı arayüzle değiştirilecek; Vercel'in dosya sistemi salt okunur olduğundan yayında yükleme bu adım tamamlanınca çalışır.
+
+## K-05 · Faz 3 entegrasyon kararları (20.11.2026)
+
+| Konu | Karar | Durum |
+|---|---|---|
+| Kart ödemesi | PayTR iFrame API | Hesap yok → mock adaptör; gerçek adaptör resmi dokümana göre, `PAYTR_*` env gelince açılır |
+| Havale/EFT | Açık | IBAN yönetim panelinden girilir; "ödeme alındı" admin'den |
+| Kapıda ödeme | Kapalı | — |
+| Kargo | Geliver (aracı) | Hesap yok → mock; gerçek adaptör resmi dokümana göre |
+| E-arşiv fatura | Paraşüt | Hesap yok → mock; gerçek adaptör resmi dokümana göre |
+| Trendyol | Yalnızca stok senkronu (fiyat elle) | Hesap yok → mock; gerçek adaptör resmi dokümana göre |
+| E-posta | Resend + React Email | Anahtar yok → e-postalar `email_logs` tablosuna yazılır, panelden görülebilir |
+| Yönetici bildirimi | E-posta | — |
+| Ölçümleme | GTM + GA4 + Meta (Consent Mode v2) | Kimlik yok → olaylar dataLayer'a yazılır, GTM yüklenmez |
+| Görsel depolama | Sonra karar verilecek | Yerel disk adaptörü |
+| Yayın / cron | Sonra karar verilecek | Cron işleri `CRON_SECRET` korumalı HTTP uç noktaları; Vercel Cron veya VPS cron ikisi de çağırabilir |
+| API dokümanları | Resmi sitelerden okunur | Uç nokta / hash biçimi tahmin edilmez; emin olunamayan nokta `DOĞRULANACAK` olarak işaretlenir |
+
+Her entegrasyon `src/lib/integrations/<ad>/` altında tek arayüzün arkasında; ortam değişkeni yoksa mock adaptör seçilir.

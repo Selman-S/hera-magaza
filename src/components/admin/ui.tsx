@@ -17,7 +17,7 @@ export function PageHeader({ title, kicker, actions }: { title: string; kicker?:
 
 export function Panel({ title, children, className, actions }: { title?: string; children: ReactNode; className?: string; actions?: ReactNode }) {
   return (
-    <section className={cx("border border-line bg-surface p-5", className)}>
+    <section className={cx("min-w-0 overflow-x-auto border border-line bg-surface p-5", className)}>
       {(title || actions) && (
         <div className="mb-4 flex items-center justify-between gap-3">
           {title && <h2 className="font-serif text-xl">{title}</h2>}
@@ -91,7 +91,7 @@ export function FilterTabs({ items, active }: { items: Array<{ href: string; lab
 }
 
 export const tableClass =
-  "w-full border-collapse text-sm [&_th]:border-b [&_th]:border-line [&_th]:px-3 [&_th]:py-2.5 [&_th]:text-left [&_th]:text-[0.6875rem] [&_th]:font-medium [&_th]:tracking-[0.08em] [&_th]:text-ink-muted [&_th]:uppercase [&_td]:border-b [&_td]:border-line [&_td]:px-3 [&_td]:py-3 [&_td]:align-middle";
+  "w-full border-collapse text-sm [&_th]:border-b [&_th]:border-line [&_th]:px-3 [&_th]:py-2.5 [&_th]:text-left [&_th]:text-[0.6875rem] [&_th]:font-medium [&_th]:tracking-[0.08em] [&_th]:text-ink-muted [&_th]:uppercase [&_td]:border-b [&_td]:border-line [&_td]:px-3 [&_td]:py-3 [&_td]:align-middle [&_td:first-child]:whitespace-nowrap";
 
 export function formatDateTime(d: Date | string) {
   return new Date(d).toLocaleString("tr-TR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Istanbul" });
