@@ -9,7 +9,7 @@ import { cookies, headers } from "next/headers";
 import { z } from "zod";
 import { getDb } from "@/lib/db";
 import * as s from "@/lib/db/schema";
-import { sign } from "@/lib/auth/sign";
+import { sign, unsign } from "@/lib/auth/sign";
 import { priceCart, type CartInput, type PricedCart } from "@/lib/data/cart";
 import { CATALOG_TAG } from "@/lib/data/catalog";
 import { createOrder, type CreateOrderResult } from "@/lib/orders/create";
@@ -126,4 +126,36 @@ export async function lookupOrder(rawOrderNo: string, rawEmail: string): Promise
     maxAge: 60 * 60,
   });
   return { ok: true, orderNo: o.orderNo };
+}
+
+const reviewSchema = z.object({
+  productId: z.string().min(1),
+  rating: z.coerce.number().int().min(1, "Puan seçin.").max(5),
+  name: z.string().trim().min(2, "Adınızı yazın.").max(40),
+  city: z.string().trim().max(40),
+  text: z.string().trim().min(15, "Yorum en az 15 karakter olmalı.").max(1000),
+});
+
+/** Yalnızca teslim edilmiş siparişin sahibi, imzalı bağlantıyla, o siparişteki ürüne bir kez yorum yazabilir. */
+export async function submitReview(token: string, input: z.input<typeof reviewSchema>): Promise<SimpleResult> {
+  const orderNo = unsign(token, "review");
+  if (!orderNo) return { ok: false, message: "Bağlantı geçersiz." };
+  const p = reviewSchema.safeParse(input);
+  if (!p.success) return { ok: false, message: p.error.issues[0]?.message ?? "Geçersiz" };
+  const db = getDb();
+  const [order] = await db.select({ id: s.orders.id, status: s.orders.status }).from(s.orders).where(eq(s.orders.orderNo, orderNo));
+  if (!order || order.status !== "delivered") return { ok: false, message: "Yorum, sipariş teslim edildikten sonra yazılabilir." };
+  const [item] = await db
+    .select({ id: s.orderItems.id })
+    .from(s.orderItems)
+    .where(and(eq(s.orderItems.orderId, order.id), eq(s.orderItems.productId, p.data.productId)))
+    .limit(1);
+  if (!item) return { ok: false, message: "Bu ürün siparişinizde yok." };
+  const inserted = await db
+    .insert(s.reviews)
+    .values({ productId: p.data.productId, orderId: order.id, name: p.data.name, city: p.data.city || null, rating: p.data.rating, text: p.data.text })
+    .onConflictDoNothing()
+    .returning({ id: s.reviews.id });
+  if (inserted.length === 0) return { ok: false, message: "Bu ürüne zaten yorum yazdınız." };
+  return { ok: true };
 }

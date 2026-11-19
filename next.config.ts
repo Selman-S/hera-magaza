@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   images: {
     qualities: [75, 85],
-    localPatterns: [{ pathname: "/urunler/**" }],
+    localPatterns: [{ pathname: "/urunler/**" }, { pathname: "/uploads/**" }],
   },
   turbopack: {
     rules: {

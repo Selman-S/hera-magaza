@@ -176,7 +176,6 @@ export function CheckoutClient({ preInfoHtml, distanceSaleHtml }: { preInfoHtml:
   const router = useRouter();
   const hydrated = useCartHydrated();
   const lines = useCart((s) => s.lines);
-  const coupon = useCart((s) => s.coupon);
   const storeSettings = useStoreSettings();
   const syncing = useCartSync();
   const [marketingConsent, setMarketingConsent] = useState(false);

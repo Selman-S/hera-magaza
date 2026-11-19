@@ -50,3 +50,6 @@ next-env.d.ts
 /public/ornek/*.jpg
 
 .vercel
+
+# Yönetim panelinden yerelde yüklenen görseller (yayında R2/Cloudinary)
+/public/uploads/

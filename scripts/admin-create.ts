@@ -30,14 +30,18 @@ const ask = (q: string, hidden = false) =>
 async function main() {
   const url = process.env.DATABASE_URL;
   if (!url) throw new Error("DATABASE_URL yok (.env.local)");
-  const email = (await ask("E-posta: ")).toLowerCase();
+  // Etkileşimsiz kullanım (test/CI): ADMIN_EMAIL ve ADMIN_PASSWORD ortam değişkenleri.
+  const nonInteractive = Boolean(process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD);
+  const email = (nonInteractive ? process.env.ADMIN_EMAIL! : await ask("E-posta: ")).toLowerCase();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new Error("Geçersiz e-posta");
-  const name = (await ask("Ad: ")) || email;
-  const password = await ask("Şifre (en az 12 karakter, harf + rakam): ", true);
+  const name = nonInteractive ? process.env.ADMIN_NAME || "Test yöneticisi" : (await ask("Ad: ")) || email;
+  const password = nonInteractive ? process.env.ADMIN_PASSWORD! : await ask("Şifre (en az 12 karakter, harf + rakam): ", true);
   const weak = validatePasswordStrength(password);
   if (weak) throw new Error(weak);
-  const again = await ask("Şifre (tekrar): ", true);
-  if (again !== password) throw new Error("Şifreler eşleşmiyor");
+  if (!nonInteractive) {
+    const again = await ask("Şifre (tekrar): ", true);
+    if (again !== password) throw new Error("Şifreler eşleşmiyor");
+  }
   rl.close();
 
   const { db, close } = createDb(url, { max: 1 });
