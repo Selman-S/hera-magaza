@@ -2,15 +2,17 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, useTransition, type ReactNode } from "react";
+import { placeOrder, validateCart } from "@/app/actions/shop";
+import { toast } from "@/components/ui/toast";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { Checkbox, Field, Input, RadioCard, Select, Textarea } from "@/components/ui/form";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CouponForm, TotalsTable } from "@/components/shop/cart-parts";
+import { CouponForm, TotalsTable, useCartSync, useCartTotals } from "@/components/shop/cart-parts";
+import { useStoreSettings } from "@/components/shop/store-settings-provider";
 import { IconClose } from "@/components/shop/icons";
-import { totalsOf, useCart, useCartHydrated, type CartLine } from "@/lib/cart/store";
+import { cartInputOf, describeIssue, useCart, useCartHydrated, type CartLine } from "@/lib/cart/store";
 import { checkoutSchema, fieldErrors, type CheckoutInput } from "@/lib/checkout/schema";
-import { createOrderNumber, LAST_ORDER_KEY, type LastOrder } from "@/lib/checkout/order";
 import { ILCELER, ILLER } from "@/lib/geo/tr";
 import { formatTRY } from "@/lib/money";
 import { settings } from "@/lib/settings";
@@ -145,8 +147,8 @@ function LegalDialog({ title, html, open, onClose }: { title: string; html: stri
   );
 }
 
-function OrderSummary({ lines, couponCode }: { lines: CartLine[]; couponCode: string | null }) {
-  const totals = totalsOf(lines, couponCode);
+function OrderSummary({ lines }: { lines: CartLine[] }) {
+  const totals = useCartTotals();
   return (
     <div className="flex flex-col gap-5">
       <ul className="flex flex-col gap-4">
@@ -174,15 +176,20 @@ export function CheckoutClient({ preInfoHtml, distanceSaleHtml }: { preInfoHtml:
   const router = useRouter();
   const hydrated = useCartHydrated();
   const lines = useCart((s) => s.lines);
-  const couponCode = useCart((s) => s.couponCode);
+  const coupon = useCart((s) => s.coupon);
+  const storeSettings = useStoreSettings();
+  const syncing = useCartSync();
+  const [marketingConsent, setMarketingConsent] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
   const clear = useCart((s) => s.clear);
   const [modal, setModal] = useState<"preinfo" | "distance" | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const formRef = useRef<HTMLFormElement>(null);
 
-  const firstPayment = (Object.keys(settings.paymentMethods) as Array<keyof typeof settings.paymentMethods>).find(
-    (k) => settings.paymentMethods[k],
+  const firstPayment = (Object.keys(storeSettings.paymentMethods) as Array<keyof typeof storeSettings.paymentMethods>).find(
+    (k) => storeSettings.paymentMethods[k],
   );
   const [form, setForm] = useState<FormState>({
     email: "",
@@ -202,7 +209,7 @@ export function CheckoutClient({ preInfoHtml, distanceSaleHtml }: { preInfoHtml:
     acceptDistanceSale: false,
   });
   const update = <K extends keyof FormState>(k: K, v: FormState[K]) => setForm((f) => ({ ...f, [k]: v }));
-  const totals = totalsOf(lines, couponCode);
+  const totals = useCartTotals();
 
   if (!hydrated) {
     return (
@@ -248,25 +255,51 @@ export function CheckoutClient({ preInfoHtml, distanceSaleHtml }: { preInfoHtml:
       return;
     }
     setErrors({});
+    setFormError(null);
     setSubmitting(true);
-    // Faz 1: sahte sipariş. Faz 2'de sunucu eylemi stok + siparişi tek transaction'da oluşturacak.
-    const d = new Date();
-    const no = createOrderNumber(d);
-    const order: LastOrder = {
-      no,
-      email: r.data.email,
-      paymentMethod: r.data.paymentMethod,
-      totalKurus: totals.totalKurus,
-      lines: lines.map((l) => ({ name: l.name, quantity: l.quantity, priceKurus: l.priceKurus, image: l.image })),
-      at: d.toISOString(),
-    };
-    try {
-      sessionStorage.setItem(LAST_ORDER_KEY, JSON.stringify(order));
-    } catch {
-      // yok say
-    }
-    clear();
-    router.push(`/siparis/${no}`);
+    startTransition(async () => {
+      try {
+        const { lines: current, coupon: currentCoupon, syncFromServer } = useCart.getState();
+        const result = await placeOrder({
+          checkout: input as CheckoutInput,
+          cart: cartInputOf(current, currentCoupon),
+          marketingConsent,
+        });
+        if (result.ok) {
+          clear();
+          router.push(`/siparis/${result.orderNo}`);
+          return;
+        }
+        setSubmitting(false);
+        switch (result.code) {
+          case "invalid":
+            setErrors(result.fieldErrors);
+            setFormError("Lütfen işaretli alanları kontrol edin.");
+            break;
+          case "stock": {
+            // Sepeti sunucudaki son duruma getir ve nedenini göster.
+            const priced = await validateCart(cartInputOf(current, currentCoupon));
+            const issues = syncFromServer(priced);
+            const msg = issues.length ? issues.map(describeIssue).join(" ") : "Sepetinizdeki bir ürün az önce tükendi.";
+            setFormError(`${msg} Sepetiniz güncellendi; kontrol edip tekrar deneyin.`);
+            break;
+          }
+          case "coupon":
+            useCart.getState().setCoupon(null);
+            setFormError(`${result.message} Kupon kaldırıldı.`);
+            break;
+          case "empty":
+            setFormError("Sepetiniz boş.");
+            break;
+          case "rate_limited":
+            setFormError("Çok fazla deneme yapıldı. Birkaç dakika sonra tekrar deneyin.");
+            break;
+        }
+      } catch {
+        setSubmitting(false);
+        toast("Sipariş gönderilemedi. Bağlantınızı kontrol edip tekrar deneyin.", "error");
+      }
+    });
   };
 
   const err = (k: string) => errors[k];
@@ -280,7 +313,7 @@ export function CheckoutClient({ preInfoHtml, distanceSaleHtml }: { preInfoHtml:
           <span className="font-medium tabular-nums">{formatTRY(totals.totalKurus)}</span>
         </summary>
         <div className="border-t border-line p-4">
-          <OrderSummary lines={lines} couponCode={couponCode} />
+          <OrderSummary lines={lines} />
         </div>
       </details>
 
@@ -364,7 +397,7 @@ export function CheckoutClient({ preInfoHtml, distanceSaleHtml }: { preInfoHtml:
           <fieldset className="flex flex-col gap-3">
             <legend className="sr-only">Ödeme yöntemi</legend>
             {(Object.keys(PAYMENT_LABELS) as Array<keyof typeof PAYMENT_LABELS>)
-              .filter((k) => settings.paymentMethods[k])
+              .filter((k) => storeSettings.paymentMethods[k])
               .map((k) => (
                 <RadioCard
                   key={k}
@@ -424,20 +457,33 @@ export function CheckoutClient({ preInfoHtml, distanceSaleHtml }: { preInfoHtml:
               </p>
             )}
           </div>
+          <Checkbox
+            checked={marketingConsent}
+            onChange={(e) => setMarketingConsent(e.target.checked)}
+            label="Yeni desenler ve kampanyalardan e-posta/SMS ile haberdar olmak istiyorum (isteğe bağlı)."
+          />
+          <p className="text-xs text-ink-muted">
+            Kişisel verileriniz siparişinizi tamamlamak için işlenir; ayrıntılar{" "}
+            <a href="/sayfa/kvkk-aydinlatma-metni" target="_blank" className="underline underline-offset-2">
+              KVKK aydınlatma metninde
+            </a>
+            .
+          </p>
         </section>
 
-        {Object.keys(errors).length > 0 && (
+        {(formError || Object.keys(errors).length > 0) && (
           <p role="alert" className="border-l-2 border-error bg-surface px-4 py-3 text-sm">
-            Lütfen işaretli {Object.keys(errors).length === 1 ? "alanı" : `${Object.keys(errors).length} alanı`} kontrol edin.
+            {formError ??
+              `Lütfen işaretli ${Object.keys(errors).length === 1 ? "alanı" : `${Object.keys(errors).length} alanı`} kontrol edin.`}
           </p>
         )}
 
         <div className="flex flex-col gap-3">
-          <Button type="submit" size="lg" className="w-full" disabled={submitting}>
-            {submitting ? "Sipariş oluşturuluyor…" : `Siparişi tamamla · ${formatTRY(totals.totalKurus)}`}
+          <Button type="submit" size="lg" className="w-full" disabled={submitting || isPending || syncing}>
+            {submitting || isPending ? "Sipariş oluşturuluyor…" : syncing ? "Sepet doğrulanıyor…" : `Siparişi tamamla · ${formatTRY(totals.totalKurus)}`}
           </Button>
           <p className="text-center text-xs text-ink-muted">
-            Faz 1 önizlemesi: ödeme alınmaz, sipariş oluşturulmaz.
+            Ödeme adımı Faz 3’te bağlanacak: siparişiniz “ödeme bekleniyor” olarak kaydedilir.
           </p>
         </div>
       </div>
@@ -445,7 +491,7 @@ export function CheckoutClient({ preInfoHtml, distanceSaleHtml }: { preInfoHtml:
       <aside aria-label="Sipariş özeti" className="hidden lg:col-span-4 lg:col-start-9 lg:block">
         <div className="sticky top-28 bg-surface p-6">
           <h2 className="mb-5 font-serif text-2xl font-light">Sipariş özeti</h2>
-          <OrderSummary lines={lines} couponCode={couponCode} />
+          <OrderSummary lines={lines} />
         </div>
       </aside>
 

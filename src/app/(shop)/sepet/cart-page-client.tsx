@@ -2,15 +2,15 @@
 
 import { ButtonLink } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CartLineItem, CouponForm, FreeShippingBar, TotalsTable } from "@/components/shop/cart-parts";
-import { totalsOf, useCart, useCartHydrated } from "@/lib/cart/store";
+import { CartLineItem, CouponForm, FreeShippingBar, TotalsTable, useCartSync, useCartTotals } from "@/components/shop/cart-parts";
+import { useCart, useCartHydrated } from "@/lib/cart/store";
 import { settings } from "@/lib/settings";
 
 export function CartPageClient() {
   const hydrated = useCartHydrated();
   const lines = useCart((s) => s.lines);
-  const couponCode = useCart((s) => s.couponCode);
-  const totals = totalsOf(lines, couponCode);
+  const totals = useCartTotals();
+  useCartSync();
 
   if (!hydrated) {
     return (

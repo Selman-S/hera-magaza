@@ -19,6 +19,7 @@ export const footerNav = {
     { href: "/sayfa/iletisim", label: "İletişim" },
     { href: "/sayfa/kargo-ve-teslimat", label: "Kargo ve teslimat" },
     { href: "/sayfa/iade-ve-degisim", label: "İade ve değişim" },
+    { href: "/siparis-sorgula", label: "Sipariş sorgula" },
   ],
   yasal: [
     { href: "/sayfa/mesafeli-satis-sozlesmesi", label: "Mesafeli satış sözleşmesi" },

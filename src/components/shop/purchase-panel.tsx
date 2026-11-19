@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { z } from "zod";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { requestBackInStock } from "@/app/actions/shop";
 import { Button } from "@/components/ui/button";
 import { Price } from "@/components/ui/price";
 import { toast } from "@/components/ui/toast";
@@ -11,6 +11,7 @@ import { cx } from "@/lib/cx";
 import { formatTRY } from "@/lib/money";
 import { settings, whatsappLink } from "@/lib/settings";
 import { QuantityStepper } from "./cart-parts";
+import { useStoreSettings } from "./store-settings-provider";
 
 type PurchaseProduct = {
   id: string;
@@ -32,6 +33,7 @@ export function PurchasePanel({ product }: { product: PurchaseProduct }) {
   const [giftNote, setGiftNote] = useState("");
   const buttonRef = useRef<HTMLDivElement>(null);
   const [showSticky, setShowSticky] = useState(false);
+  const { giftWrapPriceKurus } = useStoreSettings();
 
   const soldOut = product.stock <= 0;
   const available = Math.max(0, product.stock - inCart);
@@ -80,7 +82,7 @@ export function PurchasePanel({ product }: { product: PurchaseProduct }) {
           <span>
             Hediye paketi ve el yazısı not{" "}
             <span className="text-ink-muted">
-              ({settings.giftWrapPriceKurus > 0 ? `+${formatTRY(settings.giftWrapPriceKurus)}` : "ücretsiz"})
+              ({giftWrapPriceKurus > 0 ? `+${formatTRY(giftWrapPriceKurus)}` : "ücretsiz"})
             </span>
           </span>
         </label>
@@ -166,12 +168,11 @@ export function PurchasePanel({ product }: { product: PurchaseProduct }) {
   );
 }
 
-const notifySchema = z.email("Geçerli bir e-posta adresi yazın.");
-
 function SoldOutPanel({ product }: { product: PurchaseProduct }) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  const [pending, startTransition] = useTransition();
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-baseline gap-4">
@@ -196,10 +197,12 @@ function SoldOutPanel({ product }: { product: PurchaseProduct }) {
           className="flex flex-col gap-2"
           onSubmit={(e) => {
             e.preventDefault();
-            const r = notifySchema.safeParse(email.trim());
-            if (!r.success) return setError(r.error.issues[0]?.message ?? "Geçersiz e-posta");
-            setError(null);
-            setDone(true);
+            startTransition(async () => {
+              const r = await requestBackInStock(product.id, email);
+              if (!r.ok) return setError(r.message);
+              setError(null);
+              setDone(true);
+            });
           }}
         >
           <label htmlFor="haber-ver" className="text-sm font-medium">
@@ -217,7 +220,7 @@ function SoldOutPanel({ product }: { product: PurchaseProduct }) {
               aria-describedby={error ? "haber-ver-hata" : undefined}
               className="h-12 flex-1 rounded-xs border border-line bg-surface px-3.5 focus:border-ink focus:ring-1 focus:ring-ink focus:outline-none"
             />
-            <Button type="submit" variant="secondary">
+            <Button type="submit" variant="secondary" disabled={pending}>
               Haber ver
             </Button>
           </div>

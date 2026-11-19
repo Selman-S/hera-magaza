@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { Accordion, AccordionItem } from "@/components/ui/accordion";
 import { Gallery } from "@/components/shop/gallery";
 import { ProductGrid, ProductName } from "@/components/shop/product-card";
 import { PurchasePanel } from "@/components/shop/purchase-panel";
-import { getAllProductSlugs, getProductBySlug, getRelatedProducts } from "@/lib/data/catalog";
+import { getAllProductSlugs, getProductBySlug, getProductRedirect, getRelatedProducts } from "@/lib/data/catalog";
+import { getApprovedReviews, getStoreSettings } from "@/lib/data/store";
 import { PRODUCT_TYPE_LABEL, type ProductDetail } from "@/lib/data/schema";
 import { formatTRY } from "@/lib/money";
 import { settings } from "@/lib/settings";
@@ -59,8 +60,16 @@ function productJsonLd(p: ProductDetail) {
 export default async function ProductPage({ params }: PageProps<"/urun/[slug]">) {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
-  if (!product) notFound();
-  const related = await getRelatedProducts(product.id, 4);
+  if (!product) {
+    const moved = await getProductRedirect(slug);
+    if (moved) permanentRedirect(`/urun/${moved}`);
+    notFound();
+  }
+  const [related, store, reviews] = await Promise.all([
+    getRelatedProducts(product.id, 4),
+    getStoreSettings(),
+    getApprovedReviews({ productId: product.id, limit: 10 }),
+  ]);
   const typeLabel = PRODUCT_TYPE_LABEL[product.type];
   const listHref = product.type === "esarp" ? "/koleksiyon/esarplar" : product.type === "sal" ? "/koleksiyon/sallar" : "/koleksiyon/tumu";
 
@@ -161,7 +170,7 @@ export default async function ProductPage({ params }: PageProps<"/urun/[slug]">)
                 </AccordionItem>
                 <AccordionItem title="Kargo ve iade" name="urun-bilgi">
                   <p>
-                    İzmir’den 1–3 iş gününde kargoya verilir. {formatTRY(settings.freeShippingThresholdKurus)} ve üzeri siparişlerde
+                    İzmir’den 1–3 iş gününde kargoya verilir. {formatTRY(store.freeShippingThresholdKurus)} ve üzeri siparişlerde
                     kargo ücretsizdir. Teslimattan itibaren {settings.returnDays} gün içinde koşulsuz iade edebilirsiniz.{" "}
                     <Link href="/sayfa/iade-ve-degisim" className="text-ink underline underline-offset-2">
                       Ayrıntılar
@@ -195,6 +204,37 @@ export default async function ProductPage({ params }: PageProps<"/urun/[slug]">)
             <p className="font-serif text-xl leading-relaxed font-light lg:col-span-5 lg:col-start-8 lg:text-2xl">
               {product.artwork.story}
             </p>
+          </div>
+        </section>
+      )}
+
+      {reviews.length > 0 && (
+        <section aria-labelledby="yorum-baslik" className="container-shop py-12">
+          <div className="grid gap-8 border-t border-line pt-10 lg:grid-cols-12 lg:gap-6">
+            <div className="lg:col-span-3">
+              <h2 id="yorum-baslik" className="font-serif text-3xl font-light">
+                Yorumlar
+              </h2>
+              <p className="mt-2 text-sm text-ink-muted">
+                {(reviews.reduce((n, r) => n + r.rating, 0) / reviews.length).toLocaleString("tr-TR", { maximumFractionDigits: 1 })} / 5 ·{" "}
+                {reviews.length} doğrulanmış alıcı
+              </p>
+            </div>
+            <ul className="flex flex-col gap-8 lg:col-span-8 lg:col-start-5">
+              {reviews.map((r) => (
+                <li key={r.id}>
+                  <p aria-label={`${r.rating} / 5 yıldız`} className="text-sm tracking-[0.2em]">
+                    {"★".repeat(r.rating)}
+                    <span className="text-line">{"★".repeat(5 - r.rating)}</span>
+                  </p>
+                  <blockquote className="mt-2 font-serif text-xl leading-snug font-light">“{r.text}”</blockquote>
+                  <p className="mt-2 text-sm text-ink-muted">
+                    {r.name}
+                    {r.city ? `, ${r.city}` : ""}
+                  </p>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
       )}

@@ -1,18 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { z } from "zod";
+import { useState, useTransition } from "react";
+import { subscribeNewsletter } from "@/app/actions/shop";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
 import { cx } from "@/lib/cx";
 
-const emailSchema = z.email("Geçerli bir e-posta adresi yazın.");
-
-/** Faz 1: yalnızca arayüz. Faz 3'te e-posta servisine bağlanacak. */
+/** Kayıt veritabanına yazılır (newsletter_subscribers + consent_logs). Çift onay e-postası Faz 3'te. */
 export function NewsletterForm({ compact }: { compact?: boolean }) {
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
   const id = compact ? "bulten-alt" : "bulten";
 
   return (
@@ -20,13 +19,14 @@ export function NewsletterForm({ compact }: { compact?: boolean }) {
       noValidate
       onSubmit={(e) => {
         e.preventDefault();
-        const r = emailSchema.safeParse(email.trim());
-        if (!r.success) return setError(r.error.issues[0]?.message ?? "Geçersiz e-posta");
-        if (!consent) return setError("Devam etmek için ticari ileti onayı gerekli.");
-        setError(null);
-        setEmail("");
-        setConsent(false);
-        toast("Teşekkürler! Yeni desenlerden ilk siz haberdar olacaksınız.", "success");
+        startTransition(async () => {
+          const r = await subscribeNewsletter(email, consent, compact ? "footer" : "anasayfa");
+          if (!r.ok) return setError(r.message);
+          setError(null);
+          setEmail("");
+          setConsent(false);
+          toast("Teşekkürler! Yeni desenlerden ilk siz haberdar olacaksınız.", "success");
+        });
       }}
       className="flex flex-col gap-3"
     >
@@ -46,7 +46,7 @@ export function NewsletterForm({ compact }: { compact?: boolean }) {
           aria-describedby={error ? `${id}-hata` : undefined}
           className="h-11 flex-1 bg-transparent text-base placeholder:text-ink-muted focus:outline-none"
         />
-        <Button type="submit" variant="text" className="border-0 px-2!">
+        <Button type="submit" variant="text" className="border-0 px-2!" disabled={pending}>
           Kaydol
         </Button>
       </div>

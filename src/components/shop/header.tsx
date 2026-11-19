@@ -1,21 +1,25 @@
 import Link from "next/link";
 import { getSearchIndex } from "@/lib/data/catalog";
-import { settings, whatsappLink } from "@/lib/settings";
+import { whatsappLink } from "@/lib/settings";
+import type { StoreSettings } from "@/lib/store-settings";
 import { formatTRY } from "@/lib/money";
 import { CartButton, MobileMenuButton, SearchButton } from "./header-actions";
 import { Logo } from "./logo";
 import { mainNav } from "./nav";
 
-export function AnnouncementBar() {
+export function AnnouncementBar({ settings: store }: { settings: StoreSettings }) {
   return (
     <div className="border-b border-line bg-bg">
       <p className="container-shop py-2.5 text-center text-[0.6875rem] tracking-[0.1em] text-ink-muted uppercase">
-        {formatTRY(settings.freeShippingThresholdKurus)} üzeri ücretsiz kargo
-        <span aria-hidden className="mx-2">
-          ·
-        </span>
-        <span className="sm:hidden">Hediye kutusunda</span>
-        <span className="hidden sm:inline">Her sipariş hediye kutusunda</span>
+        {store.freeShippingThresholdKurus > 0 ? `${formatTRY(store.freeShippingThresholdKurus)} üzeri ücretsiz kargo` : "Ücretsiz kargo"}
+        {store.announcement && (
+          <>
+            <span aria-hidden className="mx-2">
+              ·
+            </span>
+            {store.announcement}
+          </>
+        )}
       </p>
     </div>
   );

@@ -2,19 +2,60 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState, useTransition } from "react";
+import { validateCart } from "@/app/actions/shop";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/form";
 import { toast } from "@/components/ui/toast";
-import { findCoupon, type CartTotals } from "@/lib/cart/pricing";
-import { useCart, type CartLine } from "@/lib/cart/store";
+import type { CartTotals } from "@/lib/cart/pricing";
+import { cartInputOf, describeIssue, totalsOf, useCart, useCartHydrated, type CartLine } from "@/lib/cart/store";
 import { cx } from "@/lib/cx";
 import { formatTRY } from "@/lib/money";
 import { settings } from "@/lib/settings";
 import { IconMinus, IconPlus } from "./icons";
+import { useStoreSettings } from "./store-settings-provider";
+
+/** Sepetin gösterim toplamı (mağaza ayarlarıyla). Asıl toplam siparişte sunucuda hesaplanır. */
+export function useCartTotals(): CartTotals {
+  const lines = useCart((s) => s.lines);
+  const coupon = useCart((s) => s.coupon);
+  return totalsOf(lines, coupon, useStoreSettings());
+}
+
+/**
+ * Sepeti bir kez sunucuyla eşitler (fiyat, stok, satışta olma, kupon). Sepet ve ödeme sayfası
+ * açıldığında ve çekmece açıldığında çağrılır; değişiklikleri kullanıcıya bildirir.
+ */
+export function useCartSync(active = true) {
+  const hydrated = useCartHydrated();
+  const [pending, startTransition] = useTransition();
+  const done = useRef(false);
+  useEffect(() => {
+    if (!active) {
+      done.current = false;
+      return;
+    }
+    if (!hydrated || done.current) return;
+    const { lines, coupon, syncFromServer } = useCart.getState();
+    if (lines.length === 0) return;
+    done.current = true;
+    const clientPrices = Object.fromEntries(lines.map((l) => [l.productId, l.priceKurus]));
+    startTransition(async () => {
+      try {
+        const priced = await validateCart(cartInputOf(lines, coupon), clientPrices);
+        const issues = syncFromServer(priced);
+        for (const i of issues) toast(describeIssue(i));
+        if (priced.couponError) toast(priced.couponError, "error");
+      } catch {
+        // Ağ hatası: sepet olduğu gibi kalır, sipariş sırasında sunucu yine doğrular.
+      }
+    });
+  }, [active, hydrated]);
+  return pending;
+}
 
 export function FreeShippingBar({ totals }: { totals: CartTotals }) {
-  const threshold = settings.freeShippingThresholdKurus;
+  const threshold = Math.max(1, useStoreSettings().freeShippingThresholdKurus);
   const progress = Math.min(100, Math.round(((threshold - totals.remainingForFreeShippingKurus) / threshold) * 100));
   const done = totals.remainingForFreeShippingKurus === 0;
   return (
@@ -94,6 +135,7 @@ export function CartLineItem({ line, onNavigate }: { line: CartLine; onNavigate?
   const remove = useCart((s) => s.remove);
   const setGift = useCart((s) => s.setGift);
   const [noteOpen, setNoteOpen] = useState(line.giftWrap);
+  const { giftWrapPriceKurus } = useStoreSettings();
   return (
     <li className="flex gap-4 py-5">
       <Link href={`/urun/${line.slug}`} onClick={onNavigate} className="relative block aspect-[4/5] w-20 shrink-0 overflow-hidden bg-placeholder sm:w-24">
@@ -130,7 +172,7 @@ export function CartLineItem({ line, onNavigate }: { line: CartLine; onNavigate?
                 setNoteOpen(e.target.checked);
               }}
             />
-            Hediye paketi{settings.giftWrapPriceKurus > 0 ? ` (+${formatTRY(settings.giftWrapPriceKurus)})` : " (ücretsiz)"}
+            Hediye paketi{giftWrapPriceKurus > 0 ? ` (+${formatTRY(giftWrapPriceKurus)})` : " (ücretsiz)"}
           </label>
           {noteOpen && line.giftWrap && (
             <textarea
@@ -150,22 +192,22 @@ export function CartLineItem({ line, onNavigate }: { line: CartLine; onNavigate?
 }
 
 export function CouponForm() {
-  const couponCode = useCart((s) => s.couponCode);
-  const applyCoupon = useCart((s) => s.applyCoupon);
+  const coupon = useCart((s) => s.coupon);
+  const setCoupon = useCart((s) => s.setCoupon);
   const [value, setValue] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
   const uid = useId();
   const inputId = `kupon-${uid}`;
   const errorId = `kupon-hata-${uid}`;
-  if (couponCode) {
-    const c = findCoupon(couponCode, settings.coupons);
+  if (coupon) {
     return (
       <div className="flex items-center justify-between text-sm">
         <span>
-          Kupon: <strong className="font-medium">{c?.code ?? couponCode}</strong>
-          {c && <span className="text-ink-muted"> · {c.label}</span>}
+          Kupon: <strong className="font-medium">{coupon.code}</strong>
+          <span className="text-ink-muted"> · {coupon.label}</span>
         </span>
-        <button type="button" className="text-xs underline underline-offset-2" onClick={() => applyCoupon(null)}>
+        <button type="button" className="text-xs underline underline-offset-2" onClick={() => setCoupon(null)}>
           Kaldır
         </button>
       </div>
@@ -176,14 +218,21 @@ export function CouponForm() {
       className="flex flex-col gap-1.5"
       onSubmit={(e) => {
         e.preventDefault();
-        const c = findCoupon(value, settings.coupons);
-        if (!c) {
-          setError("Bu kupon kodu geçerli değil.");
-          return;
-        }
-        setError(null);
-        applyCoupon(c.code);
-        toast(`${c.label} uygulandı.`, "success");
+        const code = value.trim();
+        if (!code) return;
+        // Kupon sunucuda, güncel sepet tutarıyla doğrulanır.
+        startTransition(async () => {
+          const { lines } = useCart.getState();
+          const priced = await validateCart({ ...cartInputOf(lines, null), couponCode: code });
+          if (priced.couponError || !priced.coupon) {
+            setError(priced.couponError ?? "Bu kupon kodu geçerli değil.");
+            return;
+          }
+          setError(null);
+          setValue("");
+          setCoupon(priced.coupon);
+          toast(`${priced.coupon.label} uygulandı.`, "success");
+        });
       }}
     >
       <label htmlFor={inputId} className="text-sm">
@@ -199,8 +248,8 @@ export function CouponForm() {
           aria-invalid={Boolean(error)}
           aria-describedby={error ? errorId : undefined}
         />
-        <Button type="submit" variant="secondary" className="h-11 shrink-0">
-          Uygula
+        <Button type="submit" variant="secondary" className="h-11 shrink-0" disabled={pending}>
+          {pending ? "…" : "Uygula"}
         </Button>
       </div>
       {error && (

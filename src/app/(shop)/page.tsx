@@ -6,19 +6,28 @@ import { NewsletterForm } from "@/components/shop/newsletter-form";
 import { IconArrow, IconInstagram } from "@/components/shop/icons";
 import { getCollections, getModelShots, getProductBySlug, getProducts } from "@/lib/data/catalog";
 import { getReviews } from "@/lib/data/content";
+import { getApprovedReviews, getStoreSettings } from "@/lib/data/store";
 import { formatTRY } from "@/lib/money";
 import { settings } from "@/lib/settings";
 
 const HERO_SLUG = "van-gogh-badem-cicegi-hint-ipegi-sal-70x175-turkuaz";
 
 export default async function HomePage() {
-  const [hero, collections, newArrivals, reviews, instagram] = await Promise.all([
+  const [hero, collections, newArrivals, sampleReviews, instagram, store, realReviews] = await Promise.all([
     getProductBySlug(HERO_SLUG),
     getCollections(),
     getProducts({ collection: "yeni-gelenler", inStockOnly: true, sort: "yeni" }),
     getReviews(),
     getModelShots(6),
+    getStoreSettings(),
+    getApprovedReviews({ limit: 3 }),
   ]);
+  // Gerçek (onaylı) yorum varsa onları, yoksa "örnek" etiketli taslakları göster.
+  const reviews =
+    realReviews.length > 0
+      ? realReviews.map((r) => ({ id: String(r.id), author: r.name, city: r.city ?? "", product: r.productName, text: r.text, sample: false }))
+      : sampleReviews;
+  const showSampleLabel = realReviews.length === 0;
   const featured = collections.filter((c) => c.featured);
   // Şal ve eşarpları dönüşümlü diz: art arda aynı tür kart monoton duruyor.
   const shawls = newArrivals.filter((p) => p.type !== "esarp");
@@ -157,7 +166,7 @@ export default async function HomePage() {
               ["İpek", "Şallarımız ipek ve Hint ipeği; vual ya da viskon değil. Hafif, nefes alan, dökümlü."],
               ["Az ve özel", "Her desenden yalnızca birkaç parça var. Tükenen desen genellikle yeniden gelmez."],
               ["Hediye kutusunda", "Her sipariş hediye kutusunda gider. İsterseniz notunuzu elle yazıp ekleriz."],
-              ["Hızlı kargo", `İzmir’den 1–3 iş gününde. ${formatTRY(settings.freeShippingThresholdKurus)} üzeri kargo ücretsiz.`],
+              ["Hızlı kargo", `İzmir’den 1–3 iş gününde. ${formatTRY(store.freeShippingThresholdKurus)} üzeri kargo ücretsiz.`],
             ].map(([title, text], i) => (
               <li key={title} className="flex gap-5">
                 <span aria-hidden className="font-serif text-4xl leading-none font-light text-ink-muted/60 italic">
@@ -180,9 +189,11 @@ export default async function HomePage() {
             <h2 id="yorum-baslik" className="font-serif text-3xl font-light lg:text-4xl">
               Ziyaretçi defteri
             </h2>
-            <span className="rounded-xs border border-dashed border-line px-2 py-1 text-[0.6875rem] tracking-[0.06em] text-ink-muted uppercase">
-              Örnek yorumlar
-            </span>
+            {showSampleLabel && (
+              <span className="rounded-xs border border-dashed border-line px-2 py-1 text-[0.6875rem] tracking-[0.06em] text-ink-muted uppercase">
+                Örnek yorumlar
+              </span>
+            )}
           </div>
           <ul className="grid gap-10 md:grid-cols-3 md:gap-8">
             {reviews.map((r) => (

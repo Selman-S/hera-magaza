@@ -4,17 +4,17 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { ButtonLink } from "@/components/ui/button";
 import { Sheet } from "@/components/ui/sheet";
-import { totalsOf, useCart, useCartHydrated } from "@/lib/cart/store";
-import { CartLineItem, FreeShippingBar, TotalsTable } from "./cart-parts";
+import { useCart, useCartHydrated } from "@/lib/cart/store";
+import { CartLineItem, FreeShippingBar, TotalsTable, useCartSync, useCartTotals } from "./cart-parts";
 
 export function CartDrawer() {
   const hydrated = useCartHydrated();
   const open = useCart((s) => s.drawerOpen);
   const close = useCart((s) => s.closeDrawer);
   const lines = useCart((s) => s.lines);
-  const couponCode = useCart((s) => s.couponCode);
   const pathname = usePathname();
-  const totals = totalsOf(lines, couponCode);
+  const totals = useCartTotals();
+  useCartSync(open);
 
   // Sayfa değişince çekmeceyi kapat.
   useEffect(() => {
